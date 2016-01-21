@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "render", "render\render.fsproj", "{251417B4-8151-4EEC-A3F2-225D44A419A4}"
+EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "render.test", "render.test\render.test.fsproj", "{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|x86.ActiveCfg = Debug|x86
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|x86.Build.0 = Debug|x86
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|x86.ActiveCfg = Release|x86
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|x86.Build.0 = Release|x86
+		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Debug|x86.Build.0 = Debug|Any CPU
+		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Release|x86.ActiveCfg = Release|Any CPU
+		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

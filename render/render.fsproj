@@ -23,9 +23,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Engine.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
-    <None Include="layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -51,5 +51,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\render.model\render.model.csproj">
+      <Name>render.model</Name>
+      <Project>{172470d1-a53c-4989-b53a-e4b04d18ad7a}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

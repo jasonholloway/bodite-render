@@ -1,0 +1,10 @@
+﻿@using RazorEngine.Templating
+@using render.model
+@inherits HtmlTemplateBase<ProductVM>
+
+
+@for(int i = 0; i < 5; i++) {
+    <span>HELLO @("Jason")!</span>
+}
+
+<h1>@Model.Name</h1>

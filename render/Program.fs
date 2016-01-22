@@ -1,8 +1,24 @@
-﻿// Learn more about F# at http://fsharp.net
-// See the 'F# Tutorial' project for more help.
+﻿open Engine
+
+
 [<EntryPoint>]
 let main argv =     
-    printfn "Hello Jason!"
-    0 // return an integer exit code
-    //pipe products into ...
-    //pipe categories into ...
+    let prod = new render.model.ProductVM()
+    prod.Name <- "cardboard"
+    
+    
+    let template = [|
+                        "@using render.model";
+                        "@using RazorEngine";
+                        "@using RazorEngine.Templating"
+                        "@inherits TemplateBase<ProductVM>";
+                        "Hello @Model.Name!";
+                    |]
+                    |> String.concat System.Environment.NewLine
+    
+    
+    Engine.renderString template prod
+    |> System.Console.WriteLine
+
+    0
+

@@ -55,8 +55,7 @@
   <ItemGroup>
     <ProjectReference Include="..\render.model\render.model.csproj">
       <Name>render.model</Name>
-      <Project>{172470d1-a53c-4989-b53a-e4b04d18ad7a}</Project>
-      <Private>True</Private>
+      <Project>{172470D1-A53C-4989-B53A-E4B04D18AD7A}</Project>
     </ProjectReference>
   </ItemGroup>
 </Project>

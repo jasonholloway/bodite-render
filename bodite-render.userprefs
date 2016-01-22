@@ -1,11 +1,9 @@
 ﻿<Properties StartupItem="render/render.fsproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="render/render.fsproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="render/Engine.fs">
     <Files>
-      <File FileName="render/Program.fs" Line="1" Column="1" />
-      <File FileName="render.test/Component1.fs" Line="6" Column="5" />
-      <File FileName="render.test/Script.fsx" Line="1" Column="1" />
-      <File FileName="render/render.fsproj" Line="48" Column="14" />
+      <File FileName="render/Program.fs" Line="2" Column="1" />
+      <File FileName="render/Engine.fs" Line="8" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

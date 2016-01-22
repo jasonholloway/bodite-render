@@ -1,8 +1,8 @@
-﻿namespace render.engine.test
+﻿namespace Render.Engine.Test
 
 open NUnit.Framework
 open FsUnit
-open render.engine
+open Render.Engine
 
 module EngineTests =
 
@@ -16,7 +16,7 @@ module EngineTests =
     let ``renderString renders with model`` () =        
         let template = [|
                             "@using RazorEngine.Templating"
-                            "@using render.engine.test";
+                            "@using Render.Engine.Test";
                             "@inherits TemplateBase<EngineTests.Hamster>";
                             "Hello @Model.name, you are @Model.colour!";
                         |]

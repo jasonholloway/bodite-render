@@ -1,4 +1,6 @@
-﻿module Engine
+﻿namespace Render.Engine
+
+module Engine =
 
     open System
     open RazorEngine

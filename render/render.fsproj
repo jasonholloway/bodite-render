@@ -23,7 +23,6 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Engine.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -53,6 +52,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\render.engine\render.engine.fsproj">
+      <Name>render.engine</Name>
+      <Project>{400fcef5-7a38-4cf8-8d1a-ae87b2809a46}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\render.model\render.model.csproj">
       <Name>render.model</Name>
       <Project>{172470D1-A53C-4989-B53A-E4B04D18AD7A}</Project>

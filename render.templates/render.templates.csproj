@@ -50,7 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="layout.cshtml" />
+    <None Include="product.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\render.model\render.model.csproj">

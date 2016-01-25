@@ -14,6 +14,8 @@ module EngineTests =
 
     [<Test>]
     let ``renderString renders with model`` () =        
+        let engine = new RenderEngine()
+        
         let template = [|
                             "@using RazorEngine.Templating"
                             "@using Render.Engine.Test";
@@ -23,7 +25,7 @@ module EngineTests =
                         |> String.concat System.Environment.NewLine
     
         { name = "Jeremy"; colour = "mauve" }
-        |> Engine.renderString template
+        |> engine.renderString template
         |> should equal "Hello Jeremy, you are mauve!"
 
 

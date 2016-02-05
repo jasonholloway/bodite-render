@@ -26,6 +26,7 @@
     <Compile Include="Component1.fs" />
     <Compile Include="Script.fsx" />
     <None Include="packages.config" />
+    <Content Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -44,8 +45,6 @@
     <Reference Include="NHamcrest">
       <HintPath>..\packages\FsUnit.1.4.1.0\lib\net45\NHamcrest.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\render\render.fsproj">
       <Name>render</Name>
       <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>

@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "render.templates", "render.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "render.model", "render.model\render.model.csproj", "{172470D1-A53C-4989-B53A-E4B04D18AD7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97801A33-3D6D-4B0A-8582-6B497B5326B7}"
+	ProjectSection(SolutionItems) = preProject
+		todo.txt = todo.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +25,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|Any CPU.Build.0 = Debug|x86
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|x86.ActiveCfg = Debug|x86
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Debug|x86.Build.0 = Debug|x86
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|Any CPU.ActiveCfg = Release|x86
+		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|Any CPU.Build.0 = Release|x86
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|x86.ActiveCfg = Release|x86
 		{251417B4-8151-4EEC-A3F2-225D44A419A4}.Release|x86.Build.0 = Release|x86
 		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -34,11 +41,9 @@ Global
 		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Release|x86.ActiveCfg = Release|Any CPU
 		{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}.Release|x86.Build.0 = Release|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA72A245-4463-407B-BD98-D963A77B2342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Debug|x86.Build.0 = Debug|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|x86.Build.0 = Release|Any CPU
 		{172470D1-A53C-4989-B53A-E4B04D18AD7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

@@ -1,0 +1,7 @@
+TO DO:
+
+> Gather all products into product specs
+	- fetch from couchdb
+	- filter to those with machinenames
+> Gather all categories into category specs
+

@@ -6,7 +6,6 @@ open Data
 
 [<EntryPoint>]
 let main argv =
-
     let templateMgr = ResolvePathTemplateManager([| @"../../../render.templates/" |])
     
     let renderService = 

@@ -14,28 +14,42 @@ type CategoryTree = JsonProvider<categoryTreeUrl>
 
 
 
-
 let getCategoryTree =
     CategoryTree.Load(categoryTreeUrl)
 
 
 
+
+type LocaleString = {
+    LV: string;
+    RU: string;
+    EN: string;
+}
+
 type CategoryNode = {
-    _id : string;
-    JsonValue : string;
-    Children : CategoryNode[];
+    Id : string;
+    Name : LocaleString;
+    Description : LocaleString;
+    Children : seq<CategoryNode>;
 }
 
 
+//need to clean up category tree
+
+//would work lots better if categories were stored flat in db, just linking to each other
+//...
+
+
 let getCategories =
-    let crawl (c:CategoryNode) =        
+    let rec crawl<'N> (c:'N) =        
         seq {
             yield c
             
             if c.Children != null then 
-                yield! (c.Children |> crawl) //RECURSIVE!!!!!!
+                yield! c.Children 
+                        |> Seq.collect (fun n -> crawl n)
         }
-     
+
     getCategoryTree |> crawl
 
 

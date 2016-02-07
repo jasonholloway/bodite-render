@@ -4,17 +4,28 @@ open System
 open NUnit.Framework
 open FsUnit
 open FSharp.Data
+open Products
 open Categories
 
 
 let rec createCat isRoot depth =
     {
         Key = if isRoot then "root" else System.Guid.NewGuid().ToString()
-        Name = { LV=""; RU="" }
-        Description = { LV=""; RU="" }
+        Name = { LV = None; RU = None }
+        Description = { LV = None; RU = None }
         Children = match depth with
                     | 0 -> []
                     | _ -> [0..3] |> List.map (fun i -> createCat false (depth - 1))
+        Products = []
+    }
+
+let createProd catKeys =
+    {
+        Key = System.Guid.NewGuid().ToString()
+        Name = { LV = None; RU = None }
+        Description = { LV = None; RU = None }
+        MachineName = ""
+        CategoryKeys = catKeys
     }
     
 
@@ -45,7 +56,7 @@ let ``Ensure correct number of catRecords have been created for testing`` () =
 
 [<Test>]
 let ``Categories.buildCategories includes all cats in map`` () =
-    let builtKeys = buildCategories catRecs 
+    let builtKeys = buildCategories catRecs []
                     |> Map.toSeq
                     |> Seq.map (fun kv -> match kv with | (k, v) -> k)
                     |> Set.ofSeq
@@ -57,7 +68,7 @@ let ``Categories.buildCategories includes all cats in map`` () =
 
 [<Test>]
 let ``Categories.buildCategories articulates cat children`` () =
-    let builtMap = buildCategories catRecs
+    let builtMap = buildCategories catRecs []
 
     catRecs 
     |> Seq.forall 
@@ -70,4 +81,10 @@ let ``Categories.buildCategories articulates cat children`` () =
     |> should equal true
     
 
+[<Test>]
+let ``Categories.buildCategories groups products per cat`` () =
+    let prods = catRecs 
+                |> Seq.collect (fun r -> [0..4] |> Seq.map (fun _ -> createProd [r.Key])) 
 
+    buildCategories catRecs prods
+    |> Map.iter (fun k c -> c.Products.Length |> should equal 5)

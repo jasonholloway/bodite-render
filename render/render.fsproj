@@ -34,8 +34,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Shared.fs" />
-    <Compile Include="Categories.fs" />
     <Compile Include="Products.fs" />
+    <Compile Include="Categories.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />

@@ -1,6 +1,6 @@
 ﻿module Shared
 
 type LocaleString = {
-    LV : string;
-    RU : string;
+    LV : Option<string>;
+    RU : Option<string>;
 }

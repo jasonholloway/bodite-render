@@ -48,6 +48,9 @@ let catRecs = flattenCats rootCat
                                     })
                                   
 
+
+
+
 [<Test>]
 let ``Ensure correct number of catRecords have been created for testing`` () =
     catRecs |> Seq.toList |> List.length 

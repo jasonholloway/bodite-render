@@ -1,7 +1,7 @@
 ﻿open render.model
 open RazorEngine.Configuration
 open RazorEngine.Templating
-open Data
+//open Data
 
 
 [<EntryPoint>]

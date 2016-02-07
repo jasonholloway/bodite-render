@@ -36,6 +36,7 @@
     <Compile Include="Shared.fs" />
     <Compile Include="Products.fs" />
     <Compile Include="Categories.fs" />
+    <Compile Include="Model.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Program.fs" />

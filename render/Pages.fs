@@ -1,56 +1,63 @@
-﻿module Pages
-
-open Products
-open Categories
+﻿namespace BoditeRender
 
 
 type Page (path, title) =
-    member x.Path : string = "Brigitas Bodite - " + path
-    member x.Title : string = title
-        
+    member x.Path : string = path
 
-type ProductPage (prod, cat) = 
+    member x.Title : string = "Brigitas Bodite" + match title with
+                                                    | Some t -> " - " + t
+                                                    | None -> ""
+
+                                                    
+type HomePage () =
     inherit Page(
-                "produkti/" + prod.MachineName, 
-                if prod.Name.LV.IsSome then prod.Name.LV.Value else "TITLE")
+                path = "",
+                title = None)
+
+    member val FeaturedProducts : List<Product> = List.empty
+    
+
+
+type ProductPage (prod: Product, cat: Category) = 
+    inherit Page(
+                path = Paths.resolvePath prod, 
+                title = prod.Name.LV)
 
     member val Product : Product = prod
     member val Category: Category = cat
         
 
+
 type CategoryPage (cat: Category) =
     inherit Page(
-                "categories/" + (defaultArg cat.Name.LV "blah"), 
-                defaultArg cat.Name.LV "blah")
+                path = Paths.resolvePath cat, 
+                title = cat.Name.LV)
 
     member val Category = cat
-    //or, instead of explicitly linking, could have an URL resolution service that takes a model and returns page url
-    //need some kind of mediation here as otherwise excessive tightness makes page model very difficult to immutably assemble
+    
 
 
 
 
-type Model (?products, ?categories) = 
-    member val Products = (defaultArg products Seq.empty<Product>) |> Seq.toList
-    member val Categories = (defaultArg categories Seq.empty<Category>) |> Seq.toList
 
+module Pages =
+   
+    let buildPages (m: Model) =    
+        seq {
+            yield new HomePage() :> Page
 
+            yield! m.Categories
+                    |> Seq.collect (fun c -> seq { 
+                                                yield new CategoryPage(c) :> Page
 
+                                                yield! c.Products 
+                                                       |> Seq.map (fun p -> new ProductPage(p, c) :> Page) 
 
-let buildPages (m: Model) =    
-    seq {
-        yield! m.Categories
-                |> Seq.collect (fun c -> seq { 
-                                            yield new CategoryPage(c) :> Page
+                                                })
 
-                                            yield! c.Products 
-                                                   |> Seq.map (fun p -> new ProductPage(p, c) :> Page) 
-
-                                            })
-
-        //...
-    }
-    |> Seq.toList
+            //...
+        }
+        |> Seq.toList
 
 
 
@@ -58,16 +65,16 @@ let buildPages (m: Model) =
 
 
 
-//should be one page per product*category combination
-//plus category field should be filled in here...
+    //should be one page per product*category combination
+    //plus category field should be filled in here...
 
-//
-//let getProductPages =
-//    Data.getAllProducts
-//    |> Seq.filter (fun p -> p.MachineName.IsSome)
-//    |> Seq.map (fun p -> {
-//                            path = if p.MachineName.IsSome then ("produkti/" + p.MachineName.Value) else "";
-//                            title = "Brigitas Bodite - Produkti - " + p.Name.Lv;  
-//                            product = p;
-//                            category = 13;
-//                        })
+    //
+    //let getProductPages =
+    //    Data.getAllProducts
+    //    |> Seq.filter (fun p -> p.MachineName.IsSome)
+    //    |> Seq.map (fun p -> {
+    //                            path = if p.MachineName.IsSome then ("produkti/" + p.MachineName.Value) else "";
+    //                            title = "Brigitas Bodite - Produkti - " + p.Name.Lv;  
+    //                            product = p;
+    //                            category = 13;
+    //                        })

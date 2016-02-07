@@ -4,8 +4,9 @@ open System
 open NUnit.Framework
 open FsUnit
 open FSharp.Data
-open Products
-open Categories
+
+open BoditeRender
+open BoditeRender.Categories
 
 
 let rec createCat isRoot depth =

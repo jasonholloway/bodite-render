@@ -1,4 +1,4 @@
-﻿module Shared
+﻿namespace BoditeRender
 
 type LocaleString = {
     LV : Option<string>;

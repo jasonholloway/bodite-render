@@ -4,10 +4,9 @@ open System
 open NUnit.Framework
 open FsUnit
 open FSharp.Data
-open Products
-open Categories
-open Paths
 
+open BoditeRender
+open BoditeRender.Paths
 
 
 let createCat () =

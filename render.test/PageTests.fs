@@ -3,9 +3,10 @@
 open System
 open NUnit.Framework
 open FsUnit
-open Products
-open Categories
-open Pages
+
+open BoditeRender
+open BoditeRender.Pages
+
 
 let createCatOfProds key prods =    
     {

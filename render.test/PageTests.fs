@@ -44,6 +44,7 @@ let model = new Model(products=prods, categories=cats);
 
 
 
+
 [<TestFixture>]
 type ``buildPages`` () =    
 
@@ -72,13 +73,5 @@ type ``buildPages`` () =
     [<Test>]
     member x.``builds one unique IndexPage`` () =
         failwith "Unimpl"
-
-
-
-
-
-
-
-
 
 

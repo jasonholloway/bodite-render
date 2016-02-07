@@ -24,6 +24,8 @@ type CategoryPage (cat: Category) =
                 defaultArg cat.Name.LV "blah")
 
     member val Category = cat
+    //or, instead of explicitly linking, could have an URL resolution service that takes a model and returns page url
+    //need some kind of mediation here as otherwise excessive tightness makes page model very difficult to immutably assemble
 
 
 

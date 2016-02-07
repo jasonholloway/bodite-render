@@ -4,42 +4,26 @@ open Products
 open Categories
 
 
-//
-//type IPage =
-//    abstract member Path : string
-//    abstract member Title : string
-
-
 type Page (path, title) =
     member x.Path : string = "Brigitas Bodite - " + path
     member x.Title : string = title
-
-
-
-//type CategoryPage =
-//    interface IPage with
-//        member x.Path = ""
-//        member x.Title = ""
-
-
-
-
+        
 
 type ProductPage (prod, cat) = 
     inherit Page(
                 "produkti/" + prod.MachineName, 
                 if prod.Name.LV.IsSome then prod.Name.LV.Value else "TITLE")
 
-    member x.Product : Product = prod
-    member x.Category: Category = cat
+    member val Product : Product = prod
+    member val Category: Category = cat
+        
 
+type CategoryPage (cat: Category) =
+    inherit Page(
+                "categories/" + (defaultArg cat.Name.LV "blah"), 
+                defaultArg cat.Name.LV "blah")
 
-
-//
-//type CategoryPage (cat: Category) =
-//    inherit Page(
-//                "categories/" + cat.Name.LV, 
-//                cat.name.lv)
+    member val Category = cat
 
 
 
@@ -52,11 +36,19 @@ type Model (?products, ?categories) =
 
 
 let buildPages (m: Model) =    
-    List.empty<Page>
+    seq {
+        yield! m.Categories
+                |> Seq.collect (fun c -> seq { 
+                                            yield new CategoryPage(c) :> Page
 
+                                            yield! c.Products 
+                                                   |> Seq.map (fun p -> new ProductPage(p, c) :> Page) 
 
+                                            })
 
-//buildPages should really be testable... which requires 
+        //...
+    }
+    |> Seq.toList
 
 
 

@@ -39,7 +39,7 @@ let DbRow2CatRecord (r: CategoryDbView.Row) =
     }
     
 
-let buildCategories (catRecs: seq<CatRecord>) products =
+let public buildCategories (catRecs: seq<CatRecord>) products =
     let catRecMap = catRecs |> Seq.map (fun r -> (r.Key, r)) |> Map.ofSeq
 
     let prodMap = products

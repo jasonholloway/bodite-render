@@ -17,8 +17,7 @@ module Categories =
     let allCategoriesUrl = "https://jasonholloway.cloudant.com/bb/_design/bb/_view/all-categories "
 
     type CategoryDbView = JsonProvider<allCategoriesUrl>
-
-
+    
 
     type CatRecord = {
         Key : string
@@ -37,7 +36,7 @@ module Categories =
         }
     
 
-    let public buildCategories (catRecs: seq<CatRecord>) products =
+    let buildCategories (catRecs: seq<CatRecord>) products =
         let catRecMap = catRecs |> Seq.map (fun r -> (r.Key, r)) |> Map.ofSeq
 
         let prodMap = products

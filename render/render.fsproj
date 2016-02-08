@@ -39,6 +39,7 @@
     <Compile Include="Model.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
+    <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <Content Include="App.config">
@@ -53,7 +54,15 @@
       <HintPath>..\packages\FSharp.Data.2.2.5\lib\net40\FSharp.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharpEnt.Common">
+      <HintPath>..\packages\FSharpEnt.Common.0.1.60\lib\FSharpEnt.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RazorEngine">
       <HintPath>..\packages\RazorEngine.3.7.7\lib\net40\RazorEngine.dll</HintPath>
       <Private>True</Private>
@@ -61,18 +70,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\packages\RabbitMQ.Client.3.6.0\lib\net45\RabbitMQ.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharpEnt.RabbitMq">
-      <HintPath>..\packages\FSharpEnt.RabbitMq.0.1.60\lib\FSharpEnt.RabbitMq.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharpEnt.Common">
-      <HintPath>..\packages\FSharpEnt.Common.0.1.60\lib\FSharpEnt.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <ProjectReference Include="..\render.model\render.model.csproj">
       <Name>render.model</Name>
       <Project>{172470D1-A53C-4989-B53A-E4B04D18AD7A}</Project>

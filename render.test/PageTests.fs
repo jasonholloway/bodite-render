@@ -72,7 +72,10 @@ type ``buildPages`` () =
 
 
     [<Test>]
-    member x.``builds one unique IndexPage`` () =
-        failwith "Unimpl"
+    member x.``builds one unique HomePage`` () =
+        new Model()
+        |> Pages.buildPages
+        |> Seq.filter ofType<HomePage>
+        |> Seq.length |> should equal 1
 
 

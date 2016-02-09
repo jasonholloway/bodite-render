@@ -1,4 +1,4 @@
-﻿module Bits
+﻿module Helpers
 
 open System
 open System.IO
@@ -72,3 +72,5 @@ type TempFile (relPath: string, data: string) =
     interface System.IDisposable with
         member x.Dispose() =
             File.Delete fullPath
+
+            

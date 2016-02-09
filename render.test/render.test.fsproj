@@ -25,7 +25,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Bits.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="PathTests.fs" />
     <Compile Include="ProductTests.fs" />
     <Compile Include="PageTests.fs" />

@@ -33,7 +33,7 @@ let ofType<'T> subject =
 
 
 let catKeys = [1..5] |> List.map (fun _ -> Guid.NewGuid().ToString())
-let prods = [1..30] |> List.map (fun _ -> createProduct (catKeys |> Bits.getRandomSelection 2))
+let prods = [1..30] |> List.map (fun _ -> createProduct (catKeys |> Helpers.getRandomSelection 2))
 let cats = catKeys |> List.map (fun key -> createCatOfProds key (prods 
                                                                     |> List.filter (fun p -> p.CategoryKeys |> Seq.exists (fun k -> k.Equals(key)) )))
 

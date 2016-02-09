@@ -59,7 +59,7 @@ type ``renderPage`` () =
         result |> should haveLength 1
 
         result.Head.Data
-        |> Bits.stream2String
+        |> Helpers.stream2String
         |> should equal "hello!"
 
 
@@ -69,7 +69,7 @@ type ``getFSResolver`` () =
     
     [<Test>]
     member x.``resolves file from immediate directory`` () =
-        use file = new Bits.TempFile("file.cshtml", "templatecontents")
+        use file = new Helpers.TempFile("file.cshtml", "templatecontents")
         
         let resolver = Render.getFSResolver file.DirPath
 
@@ -84,7 +84,7 @@ type ``getFSCommitter`` () =
 
     [<Test>]
     member x.``commits to immediate directory`` () =
-        use folder = new Bits.TempFolder()
+        use folder = new Helpers.TempFolder()
 
         let committer = Render.getFSCommitter folder.Path
                     

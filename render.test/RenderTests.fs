@@ -2,7 +2,9 @@
 
 open NUnit.Framework
 open FsUnit
+open FsUnit.TopLevelOperators
 open System
+open System.IO
 open BoditeRender
 
 
@@ -31,6 +33,10 @@ let createCatAndProd () =
     (cat, prod)
         
 
+let stream2String (str: Stream) =
+    using (new StreamReader(str))
+            (fun r -> r.ReadToEnd())
+
 
 
 [<TestFixture>]
@@ -38,21 +44,45 @@ type ``renderPage`` () =
 
     [<Test>]
     member x.``returns VirtFile list`` () =
-        Render.renderPage (new Page(path="", title=None))
+        let renderer = Renderer(fun s -> "hello!")
+
+        renderer.renderPage (new Page(path="", title=None))
         |> should be ofExactType<VirtFile list>
          
-         
+    
     [<Test>]
-    member x.``renders ProductPage to single HTML file`` () =
-        let cat, prod = createCatAndProd()
-        let files = new ProductPage(prod=prod, cat=cat)
-                    |> Render.renderPage
+    member x.``calls template resolver with typename of passed Page`` () =
+        let renderer = Renderer(fun k -> 
+                                    match k with
+                                    | "Page"    -> "hello!" 
+                                    | _         -> failwith "Bad template key!")
+                                    
+        let result = renderer.renderPage (new Page(path="", title=None))
         
-        files.Length |> should equal 1
+        result |> should be ofExactType<VirtFile list>
+        result |> should haveLength 1
 
-        let file = files.[0]
+        using (new StreamReader(result.Head.Data))
+                (fun r -> 
+                    r.ReadToEnd() |> should equal "hello!"
+                )
 
-        file.Data.Length |> should be (greaterThan 0)
 
-        //should also test that is HTML file by running regex on text contents
 
+
+//         
+//    [<Test>]
+//    member x.``renders ProductPage to single HTML file`` () =
+//        let cat, prod = createCatAndProd()
+//        let files = new ProductPage(prod=prod, cat=cat)
+//                    |> Render.renderPage
+//        
+//        files.Length |> should equal 1
+//
+//        let file = files.[0]
+//
+//        file.Data.Length |> should be (greaterThan 0)
+//        
+//        (file.Data |> stream2String).ToLower().Contains("<html>")
+//        |> should equal true
+//                

@@ -15,7 +15,8 @@ let main argv =
                     new ProductPage(Url = "", Title = "Hello!") //one page per product * category
                     new ProductPage(Url = "", Title = "Hello again!")
                 |];
-                                                                                                                          
+                                      
+                                                                                                                                                        
     prods
     |> Seq.map (fun p -> renderService.RunCompile("product.cshtml", p.GetType(), p))
     |> Seq.iter (fun t -> t |> System.Console.WriteLine)

@@ -59,7 +59,7 @@ type Renderer (templateResolver: string -> string) =
                                         str :> Stream
                                         )
 
-        [VirtFile(path=p.Path, data=data)]
+        [new VirtFile(path=p.Path, data=data)]
 
 
 
@@ -73,18 +73,6 @@ type Renderer (templateResolver: string -> string) =
 
 module Render =
 
-
-    let getBlitter buffer =
-        let rec blit (sOut: Stream) (sIn: Stream) =
-            match sIn.Read(buffer, 0, buffer.Length) with
-            | 0 -> ()
-            | c -> 
-                sOut.Write(buffer, 0, c)
-                blit sIn sOut
-        blit
-            
-
-
     let getFSResolver dirPath =
         fun relPath -> 
             use file = File.OpenRead (Path.Combine(dirPath, relPath))
@@ -94,7 +82,7 @@ module Render =
 
     let getFSCommitter dirPath =
         fun (vf: VirtFile) ->
-            let blitter = getBlitter (Array.zeroCreate<byte>(4096))
+            let blitter = Shared.getBlitter (Array.zeroCreate<byte>(4096))
 
             use sFile = File.Create (Path.Combine(dirPath, vf.Path))
             

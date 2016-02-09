@@ -55,12 +55,6 @@
     <None Include="packages.config" />
     <None Include="product.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\render.model\render.model.csproj">
-      <Project>{172470d1-a53c-4989-b53a-e4b04d18ad7a}</Project>
-      <Name>render.model</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

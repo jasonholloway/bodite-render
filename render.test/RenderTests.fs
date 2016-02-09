@@ -63,6 +63,7 @@ type ``renderPage`` () =
         |> should equal "hello!"
 
 
+
 [<TestFixture>]
 type ``getFSResolver`` () =
     
@@ -74,3 +75,23 @@ type ``getFSResolver`` () =
 
         resolver "file.cshtml"
         |> should equal "templatecontents"
+
+
+
+
+[<TestFixture>]
+type ``getFSCommitter`` () =
+
+    [<Test>]
+    member x.``commits to immediate directory`` () =
+        use folder = new Bits.TempFolder()
+
+        let committer = Render.getFSCommitter folder.Path
+                    
+        use vf = new VirtFile("file.html", "blarg")
+                       
+        committer vf 
+        |> ignore
+
+        File.ReadAllText(Path.Combine(folder.Path, vf.Path))
+        |> should equal "blarg"

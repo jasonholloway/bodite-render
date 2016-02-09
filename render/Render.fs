@@ -1,15 +1,24 @@
 ﻿namespace BoditeRender
 
+open System
 open System.IO
 open RazorEngine.Configuration
 open RazorEngine.Templating
 
 
 
-type VirtFile = {
-    Path: string
-    Data: Stream
-}
+type VirtFile (path, data: Stream) =
+    new (path, data: string) =
+        let str = new MemoryStream(Text.ASCIIEncoding.UTF8.GetBytes(data))
+        new VirtFile(path, str)
+
+    member val Path: string = path
+    member val Data: Stream = data
+
+    interface IDisposable with
+        member x.Dispose () =
+            x.Data.Dispose()
+
 
 
 type LazyStream (fac : unit -> Stream) =
@@ -50,7 +59,7 @@ type Renderer (templateResolver: string -> string) =
                                         str :> Stream
                                         )
 
-        [{ Path=p.Path; Data=data }]
+        [VirtFile(path=p.Path, data=data)]
 
 
 
@@ -64,9 +73,30 @@ type Renderer (templateResolver: string -> string) =
 
 module Render =
 
+
+    let getBlitter buffer =
+        let rec blit (sOut: Stream) (sIn: Stream) =
+            match sIn.Read(buffer, 0, buffer.Length) with
+            | 0 -> ()
+            | c -> 
+                sOut.Write(buffer, 0, c)
+                blit sIn sOut
+        blit
+            
+
+
     let getFSResolver dirPath =
         fun relPath -> 
             use file = File.OpenRead (Path.Combine(dirPath, relPath))
             use reader = new StreamReader(file)
             reader.ReadToEnd()
             
+
+    let getFSCommitter dirPath =
+        fun (vf: VirtFile) ->
+            let blitter = getBlitter (Array.zeroCreate<byte>(4096))
+
+            use sFile = File.Create (Path.Combine(dirPath, vf.Path))
+            
+            vf.Data
+            |> blitter sFile

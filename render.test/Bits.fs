@@ -41,6 +41,21 @@ let stream2String (str: Stream) =
 
 
 
+type TempFolder () =
+    let path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())
+
+    do
+        Directory.CreateDirectory(path) 
+        |> ignore
+
+    member val Path = path
+
+    interface IDisposable with
+        member x.Dispose() = 
+            Directory.Delete(path, true)
+
+
+
 type TempFile (relPath: string, data: string) =    
 
     let dirPath = Path.GetTempPath()

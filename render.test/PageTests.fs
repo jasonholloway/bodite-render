@@ -8,6 +8,7 @@ open BoditeRender
 open BoditeRender.Pages
 
 
+
 let createCatOfProds key prods =    
     {
         Key = key
@@ -26,18 +27,13 @@ let createProduct catKeys =
         CategoryKeys = catKeys
     }
     
-let getRandomSelection count values =
-    let rnd = Random()
-    let max = (values |> List.length) - 1
-    [1..count] |> List.map (fun _ -> values.[rnd.Next(max)] )
-
 
 let ofType<'T> subject =
     box subject :? 'T
 
 
 let catKeys = [1..5] |> List.map (fun _ -> Guid.NewGuid().ToString())
-let prods = [1..10] |> List.map (fun _ -> createProduct (catKeys |> getRandomSelection 3))
+let prods = [1..30] |> List.map (fun _ -> createProduct (catKeys |> Bits.getRandomSelection 2))
 let cats = catKeys |> List.map (fun key -> createCatOfProds key (prods 
                                                                     |> List.filter (fun p -> p.CategoryKeys |> Seq.exists (fun k -> k.Equals(key)) )))
 

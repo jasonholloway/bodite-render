@@ -12,22 +12,22 @@ type VirtFile = {
 }
 
 
-type LazyStream (create : unit -> Stream) =
+type LazyStream (fac : unit -> Stream) =
     inherit Stream()
     
-    let lzStr = Lazy.Create create
+    let lzStr = Lazy.Create fac
                                 
-    override Stream.get_CanRead () = true
-    override Stream.get_CanSeek () = true
-    override Stream.get_CanWrite () = false
-    override Stream.get_Length () = lzStr.Value.Length
-    override Stream.get_Position () = lzStr.Value.Position
-    override Stream.set_Position (v) = lzStr.Value.Position <- v
-    override Stream.Flush () = lzStr.Value.Flush()
-    override Stream.Seek (offset, origin) = lzStr.Value.Seek(offset, origin)
-    override Stream.SetLength (l) = raise (System.NotSupportedException())
-    override Stream.Read (buffer, offset, count) = lzStr.Value.Read(buffer, offset, count)
-    override Stream.Write (buffer, offset, count) = raise (System.NotSupportedException())
+    override x.get_CanRead () = true
+    override x.get_CanSeek () = true
+    override x.get_CanWrite () = false
+    override x.get_Length () = lzStr.Value.Length
+    override x.get_Position () = lzStr.Value.Position
+    override x.set_Position (v) = lzStr.Value.Position <- v
+    override x.Flush () = lzStr.Value.Flush()
+    override x.Seek (offset, origin) = lzStr.Value.Seek(offset, origin)
+    override x.SetLength (l) = raise (System.NotSupportedException())
+    override x.Read (buffer, offset, count) = lzStr.Value.Read(buffer, offset, count)
+    override x.Write (buffer, offset, count) = raise (System.NotSupportedException())
 
 
 
@@ -41,15 +41,14 @@ type Renderer (templateResolver: string -> string) =
             
                 
     member x.renderPage (p: Page) =    
-        let data = new LazyStream 
-                        (fun _ ->
-                            let str = new MemoryStream()
-                            let writer = new StreamWriter(str)
-                            renderService.RunCompile(p.GetType().Name, writer, p.GetType(), p)
-                            writer.Flush()
-                            str.Position <- 0L
-                            str :> Stream
-                            )
+        let data = new LazyStream (fun _ ->
+                                        let str = new MemoryStream()
+                                        let writer = new StreamWriter(str)
+                                        renderService.RunCompile(p.GetType().Name, writer, p.GetType(), p)
+                                        writer.Flush()
+                                        str.Position <- 0L
+                                        str :> Stream
+                                        )
 
         [{ Path=p.Path; Data=data }]
 
@@ -63,3 +62,11 @@ type Renderer (templateResolver: string -> string) =
 
 
 
+module Render =
+
+    let getFSResolver dirPath =
+        fun relPath -> 
+            use file = File.OpenRead (Path.Combine(dirPath, relPath))
+            use reader = new StreamReader(file)
+            reader.ReadToEnd()
+            

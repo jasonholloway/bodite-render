@@ -33,10 +33,6 @@ let createCatAndProd () =
     (cat, prod)
         
 
-let stream2String (str: Stream) =
-    using (new StreamReader(str))
-            (fun r -> r.ReadToEnd())
-
 
 
 [<TestFixture>]
@@ -51,7 +47,7 @@ type ``renderPage`` () =
          
     
     [<Test>]
-    member x.``calls template resolver with typename of passed Page`` () =
+    member x.``resolves template with typename of passed Page`` () =
         let renderer = Renderer(fun k -> 
                                     match k with
                                     | "Page"    -> "hello!" 
@@ -62,27 +58,19 @@ type ``renderPage`` () =
         result |> should be ofExactType<VirtFile list>
         result |> should haveLength 1
 
-        using (new StreamReader(result.Head.Data))
-                (fun r -> 
-                    r.ReadToEnd() |> should equal "hello!"
-                )
+        result.Head.Data
+        |> Bits.stream2String
+        |> should equal "hello!"
 
 
+[<TestFixture>]
+type ``getFSResolver`` () =
+    
+    [<Test>]
+    member x.``resolves file from immediate directory`` () =
+        use file = new Bits.TempFile("file.cshtml", "templatecontents")
+        
+        let resolver = Render.getFSResolver file.DirPath
 
-
-//         
-//    [<Test>]
-//    member x.``renders ProductPage to single HTML file`` () =
-//        let cat, prod = createCatAndProd()
-//        let files = new ProductPage(prod=prod, cat=cat)
-//                    |> Render.renderPage
-//        
-//        files.Length |> should equal 1
-//
-//        let file = files.[0]
-//
-//        file.Data.Length |> should be (greaterThan 0)
-//        
-//        (file.Data |> stream2String).ToLower().Contains("<html>")
-//        |> should equal true
-//                
+        resolver "file.cshtml"
+        |> should equal "templatecontents"

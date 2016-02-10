@@ -4,12 +4,6 @@ open System
 open System.IO
 
 
-type LocaleString = {
-    LV : Option<string>;
-    RU : Option<string>;
-}
-
-
 module Shared =
 
     let getBlitter buffer =

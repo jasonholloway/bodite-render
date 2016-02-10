@@ -47,7 +47,10 @@ module Pages =
             yield new HomePage() :> Page
 
             yield! m.Categories
-                    |> Seq.collect (fun c -> seq { 
+                    |> Map.toSeq
+                    |> Seq.collect (fun kc -> seq { 
+                                                let _, c = kc 
+
                                                 yield new CategoryPage(c) :> Page
 
                                                 yield! c.Products 

@@ -26,10 +26,12 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Helpers.fs" />
-    <Compile Include="PathTests.fs" />
+    <Compile Include="Json.fs" />
     <Compile Include="ProductTests.fs" />
-    <Compile Include="PageTests.fs" />
     <Compile Include="CategoryTests.fs" />
+    <Compile Include="HydrateTests.fs" />
+    <Compile Include="PathTests.fs" />
+    <Compile Include="PageTests.fs" />
     <Compile Include="RenderTests.fs" />
     <Compile Include="Script.fsx" />
     <Content Include="app.config" />
@@ -52,6 +54,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />

@@ -11,6 +11,7 @@ open System.Runtime.CompilerServices
 [<assembly:AssemblyCopyright("jason")>]
 [<assembly:AssemblyTrademark("")>]
 [<assembly:AssemblyVersion("1.0.0.0")>]
+[<assembly:InternalsVisibleTo("render.test")>]
 ()
 // The assembly version has the format {Major}.{Minor}.{Build}.{Revision}
 //[<assembly: AssemblyDelaySign(false)>]

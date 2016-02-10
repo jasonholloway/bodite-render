@@ -15,8 +15,8 @@ module Hydrator =
 
     type ProductDbView = JsonProvider<allProductsUrl>
     
-    let private hydrateProducts () =
-        ProductDbView.Load(allProductsUrl).Rows        
+    let internal hydrateProducts (json: string) =
+        ProductDbView.Load(json).Rows        
         |> Seq.map (fun r -> 
                         {
                             Key = Regex.Match(r.Value.Id, "^product[\/-](.+)").Value
@@ -47,7 +47,7 @@ module Hydrator =
     type private CategoryDbView = JsonProvider<allCategoriesUrl>
     
 
-    type private CatRecord = {
+    type internal CatRecord = {
         Key : string
         Name : LocaleString
         Description : LocaleString
@@ -57,7 +57,7 @@ module Hydrator =
 
     let private DbRow2CatRecord (r: CategoryDbView.Row) = 
         { 
-            Key = r.Key.JsonValue.ToString();  
+            Key = if r.Key.Guid.IsSome then r.Key.Guid.Value.ToString() else r.Key.String.Value
             Name = { LV = Some r.Value.Name.Value.Lv; RU = None };
             Description = { LV = None; RU = None };
             ChildKeys = r.Value.Children |> Array.map (fun g -> g.ToString()) |> Array.toList
@@ -110,8 +110,8 @@ module Hydrator =
                 Map.empty<string, Category>
     
 
-    let private hydrateCategories prods =
-        let catRecs =   CategoryDbView.Load(allCategoriesUrl).Rows
+    let internal hydrateCategories (json: string) prods =
+        let catRecs =   CategoryDbView.Parse(json).Rows
                         |> Seq.map DbRow2CatRecord
 
         buildCategories catRecs prods
@@ -122,8 +122,8 @@ module Hydrator =
 
 
     let hydrateModel () =
-        let prods = hydrateProducts()
-        let cats = hydrateCategories(prods)
+        let prods = hydrateProducts allProductsUrl
+        let cats = hydrateCategories allCategoriesUrl prods
 
         Model(prods, cats)
 

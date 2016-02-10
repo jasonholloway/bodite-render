@@ -40,6 +40,15 @@ let stream2String (str: Stream) =
 
 
 
+let rec flatten getChildren node =
+    seq {
+        yield node
+
+        yield! getChildren node 
+                |> Seq.collect (fun c -> flatten getChildren c)
+    }
+
+
 
 type TempFolder () =
     let path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())

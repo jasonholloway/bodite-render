@@ -33,9 +33,22 @@ let ofType<'T> subject =
 
 
 let catKeys = [1..5] |> List.map (fun _ -> Guid.NewGuid().ToString())
-let prods = [1..30] |> List.map (fun _ -> createProduct (catKeys |> Helpers.getRandomSelection 2))
-let cats = catKeys |> List.map (fun key -> createCatOfProds key (prods 
-                                                                    |> List.filter (fun p -> p.CategoryKeys |> Seq.exists (fun k -> k.Equals(key)) )))
+
+let prods = [1..30] 
+            |> Seq.map (fun _ -> createProduct (catKeys |> Helpers.getRandomSelection 2)) 
+            |> Seq.map (fun p -> (p.Key, p))
+            |> Map.ofSeq 
+
+let cats =  catKeys 
+            |> Seq.map 
+                (fun key -> createCatOfProds key (prods 
+                                                    |> Map.toSeq
+                                                    |> Seq.filter (fun (k, p) -> p.CategoryKeys |> Seq.exists (fun ck -> ck.Equals(key)))
+                                                    |> Seq.map (fun (k, p) -> p)
+                                                    |> Seq.toList
+                                                    ))
+            |> Seq.map (fun c -> (c.Key, c))
+            |> Map.ofSeq
 
 let model = new Model(products=prods, categories=cats);
 
@@ -56,7 +69,10 @@ type ``buildPages`` () =
         model
         |> Pages.buildPages
         |> Seq.filter ofType<ProductPage>
-        |> Seq.length |> should equal (model.Products |> Seq.collect (fun p -> p.CategoryKeys) |> Seq.length)
+        |> Seq.length |> should equal (model.Products 
+                                            |> Map.toSeq 
+                                            |> Seq.collect (fun (_, p) -> p.CategoryKeys) 
+                                            |> Seq.length)
 
 
     [<Test>]
@@ -64,7 +80,7 @@ type ``buildPages`` () =
         model
         |> Pages.buildPages
         |> Seq.filter ofType<CategoryPage>
-        |> Seq.length |> should equal (model.Categories |> Seq.length)
+        |> Seq.length |> should equal model.Categories.Count
 
 
     [<Test>]

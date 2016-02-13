@@ -38,6 +38,7 @@
     <Compile Include="Hydrator.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
+    <Compile Include="PageBuilders.fs" />
     <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />

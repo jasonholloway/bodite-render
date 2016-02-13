@@ -12,7 +12,6 @@ type Product = {
     Key: string
     Name: LocaleString
     Description: LocaleString
-    MachineName: string
     CategoryKeys: List<string>
 }
 
@@ -21,9 +20,15 @@ type Category = {
     Key : string
     Name : LocaleString
     Description : LocaleString
-    Children : List<Category> 
-    Products : List<Product>   
+    Children : Category list
+    Products : Product list   
 }
+
+
+
+
+// Finally: a map of sets
+
 
 
 

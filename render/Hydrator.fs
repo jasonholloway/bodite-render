@@ -7,16 +7,28 @@ open System.Text.RegularExpressions
 
 module Hydrator =
 
-    ///////////////////////////////////////////////////
-    /// PRODUCTS /////////////////////////////////////
+#if RELEASE
+    [<Literal>]
+    let dbUrl = "https://jasonholloway.cloudant.com/bb"
+#else
+    [<Literal>]
+    let dbUrl = "http://localhost:5984/bb"
+#endif
+
+
+
+
+
+    //////////////////////////////////////////////////
+    // PRODUCTS /////////////////////////////////////
              
     [<Literal>]
-    let allProductsUrl = "https://jasonholloway.cloudant.com/bb/_design/bb/_view/all-products   "
+    let allProductsUrl = dbUrl + "/_design/bb/_view/all-products"
 
     type ProductDbView = JsonProvider<allProductsUrl>
     
     let internal hydrateProducts (json: string) =
-        ProductDbView.Load(json).Rows        
+        ProductDbView.Parse(json).Rows        
         |> Seq.map (fun r -> 
                         {
                             Key = Regex.Match(r.Value.Id, "^product[\/-](.+)").Value
@@ -28,7 +40,6 @@ module Hydrator =
                                             LV = None
                                             RU = None
                                             }
-                            MachineName = r.Value.MachineName
                             CategoryKeys = r.Value.CategoryKeys |> Seq.map (fun g -> g.ToString()) |> Seq.toList
                         }
                     )
@@ -38,16 +49,17 @@ module Hydrator =
 
 
 
-    //////////////////////////////////////////////////
-    /// CATEGORIES //////////////////////////////////
+
+    /////////////////////////////////////////////////
+    // CATEGORIES //////////////////////////////////
         
     [<Literal>]
-    let allCategoriesUrl = "https://jasonholloway.cloudant.com/bb/_design/bb/_view/all-categories "
+    let allCategoriesUrl = dbUrl + "/_design/bb/_view/all-categories"
 
     type private CategoryDbView = JsonProvider<allCategoriesUrl>
     
 
-    type internal CatRecord = {
+    type internal CatRec = {
         Key : string
         Name : LocaleString
         Description : LocaleString
@@ -64,7 +76,7 @@ module Hydrator =
         }
     
 
-    let private buildCategories (catRecs: seq<CatRecord>) (prodMap: Map<string, Product>) =
+    let private buildCategories (catRecs: seq<CatRec>) (prodMap: Map<string, Product>) =
         let catRecMap = catRecs |> Seq.map (fun r -> (r.Key, r)) |> Map.ofSeq
 
         let groupedProdMap = prodMap
@@ -77,7 +89,7 @@ module Hydrator =
                                 |> Map.ofSeq
 
 
-        let rec rec2Cat (map: Map<string, Category>) (r: CatRecord) =        
+        let rec rec2Cat (map: Map<string, Category>) (r: CatRec) =        
             match map.TryFind(r.Key) with
             | Some cat -> 
                     (map, cat)

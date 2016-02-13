@@ -9,19 +9,6 @@ open BoditeRender
 open Hydrator
 open Json
 
-//
-//let rec private createCat isRoot depth =
-//    {
-//        Key = if isRoot then "root" else System.Guid.NewGuid().ToString()
-//        Name = { LV = None; RU = None }
-//        Description = { LV = None; RU = None }
-//        Children = match depth with
-//                    | 0 -> []
-//                    | _ -> [0..3] |> List.map (fun i -> createCat false (depth - 1))
-//        Products = []
-//    }
-
-
 
 type CatNode = {
     Key: string
@@ -57,8 +44,7 @@ let createCatJson branching depth =
                                                 JProp("key", !! n.Key)
                                                 JProp("value", JObj [                    
                                                                 JProp("_id", !! "")
-                                                                JProp("_rev", !! "")                            
-                                                                JProp("key", !! n.Key)
+                                                                JProp("_rev", !! "")    
                                                                 JProp("name", JObj [
                                                                                 JProp("LV", !! "") 
                                                                                 ])                                                                                
@@ -75,9 +61,7 @@ let createCatJson branching depth =
     
     ( rootNode, jsonString )
 
-
-
-
+    
 
 let private createProd catKeys =
     {
@@ -88,35 +72,6 @@ let private createProd catKeys =
         CategoryKeys = catKeys
     }
     
-//
-//let rec private flattenCats cat =
-//    seq {
-//        yield cat
-//        yield! cat.Children |> Seq.collect (fun c -> flattenCats c)
-//    }
-
-    
-//
-//let private rootCat = createCat true 4
-
-//
-//let private catRecs = flattenCats rootCat
-//                        |> Seq.map (fun cat -> {
-//                                            Key = cat.Key
-//                                            Name = cat.Name
-//                                            Description = cat.Description
-//                                            ChildKeys = cat.Children |> List.map (fun c -> c.Key)
-//                                        })
-                                  
-
-
-
-//
-//[<Test>]
-//let ``Ensure correct number of catRecords have been created for testing`` () =
-//    catRecs |> Seq.toList |> List.length 
-//    |> should equal (1 + 4 + 16 + 64 + 256)
-
 
 
 [<TestFixture>]

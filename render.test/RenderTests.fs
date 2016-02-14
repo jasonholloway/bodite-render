@@ -11,8 +11,8 @@ open BoditeRender
 let createCategory key prods =    
     {
         Key = key
-        Name = { LV=None; RU=None }
-        Description = { LV=None; RU=None }
+        Name = LocaleString []
+        Description = LocaleString []
         Children = []
         Products = prods
     }
@@ -20,9 +20,9 @@ let createCategory key prods =
 let createProduct catKeys =
     {
         Key = Guid.NewGuid().ToString()
-        Name = { LV=None; RU=None }
-        Description = { LV=None; RU=None }
-        MachineName = ""
+        Name = LocaleString []
+        Description = LocaleString []
+//        MachineName = ""
         CategoryKeys = catKeys
     }
     
@@ -34,6 +34,15 @@ let createCatAndProd () =
         
 
 
+type TestPage () =
+    inherit Page("Test")
+
+    override Page.Path = ""
+    override Page.Locale = Locale.LV
+    override Page.Title = "Hello"
+
+
+
 
 [<TestFixture>]
 type ``renderPage`` () =
@@ -42,7 +51,7 @@ type ``renderPage`` () =
     member x.``returns VirtFile list`` () =
         let renderer = Renderer(fun s -> "hello!")
 
-        renderer.renderPage (new Page(path="", title=None))
+        renderer.renderPage (TestPage())
         |> should be ofExactType<VirtFile list>
          
     
@@ -50,10 +59,10 @@ type ``renderPage`` () =
     member x.``resolves template with typename of passed Page`` () =
         let renderer = Renderer(fun k -> 
                                     match k with
-                                    | "Page"    -> "hello!" 
+                                    | "TestPage"    -> "hello!" 
                                     | _         -> failwith "Bad template key!")
                                     
-        let result = renderer.renderPage (new Page(path="", title=None))
+        let result = renderer.renderPage (TestPage())
         
         result |> should be ofExactType<VirtFile list>
         result |> should haveLength 1

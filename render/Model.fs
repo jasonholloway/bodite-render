@@ -2,11 +2,6 @@
 namespace BoditeRender
 
 
-type LocaleString = {
-    LV : Option<string>;
-    RU : Option<string>;
-}
-
 
 type Product = {
     Key: string
@@ -36,5 +31,3 @@ type Category = {
 type Model (?products, ?categories) = 
     member val Products = (defaultArg products Map.empty<string, Product>)
     member val Categories = (defaultArg categories Map.empty<string, Category>)
-
-

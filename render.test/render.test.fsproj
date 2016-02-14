@@ -27,7 +27,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Json.fs" />
-    <Compile Include="ProductTests.fs" />
     <Compile Include="CategoryTests.fs" />
     <Compile Include="HydrateTests.fs" />
     <Compile Include="PathTests.fs" />
@@ -36,6 +35,8 @@
     <Compile Include="Script.fsx" />
     <Content Include="app.config" />
     <None Include="packages.config" />
+    <Compile Include="LocaleTests.fs" />
+    <Compile Include="ProductTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

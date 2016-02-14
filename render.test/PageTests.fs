@@ -12,8 +12,8 @@ open BoditeRender.Pages
 let createCatOfProds key prods =    
     {
         Key = key
-        Name = { LV=None; RU=None }
-        Description = { LV=None; RU=None }
+        Name = LocaleString []
+        Description = LocaleString []
         Children = []
         Products = prods
     }
@@ -21,9 +21,9 @@ let createCatOfProds key prods =
 let createProduct catKeys =
     {
         Key = Guid.NewGuid().ToString()
-        Name = { LV=None; RU=None }
-        Description = { LV=None; RU=None }
-        MachineName = ""
+        Name = LocaleString []
+        Description = LocaleString []
+//        MachineName = ""
         CategoryKeys = catKeys
     }
     
@@ -76,7 +76,7 @@ type ``buildPages`` () =
 
 
     [<Test>]
-    member x.``builds one page per Category`` () = 
+    member x.``builds CategoryPage per Category * Locale`` () = 
         model
         |> Pages.buildPages
         |> Seq.filter ofType<CategoryPage>

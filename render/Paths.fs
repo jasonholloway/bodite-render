@@ -13,7 +13,7 @@ module Paths =
 
         | :? Product ->
             let p = box m :?> Product
-            "product/" + p.MachineName 
+            "product/" + "" //p.MachineName 
 
         | :? Category ->
             let c = box m :?> Category

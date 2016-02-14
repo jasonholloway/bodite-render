@@ -34,11 +34,11 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Shared.fs" />
+    <Compile Include="Locale.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Hydrator.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
-    <Compile Include="PageBuilders.fs" />
     <Compile Include="Render.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />

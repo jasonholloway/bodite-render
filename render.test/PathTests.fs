@@ -12,8 +12,8 @@ open BoditeRender.Paths
 let createCat () =
     {
         Key = System.Guid.NewGuid().ToString()
-        Name = { LV = None; RU = None }
-        Description = { LV = None; RU = None }
+        Name = LocaleString []
+        Description = LocaleString []
         Children = []
         Products = []
     }
@@ -21,9 +21,9 @@ let createCat () =
 let createProd () =
     {
         Key = System.Guid.NewGuid().ToString()
-        Name = { LV = None; RU = None }
-        Description = { LV = None; RU = None }
-        MachineName = "kjhkjhuhu"
+        Name = LocaleString []
+        Description = LocaleString []
+//        MachineName = "kjhkjhuhu"
         CategoryKeys = []
     }
     
@@ -37,7 +37,7 @@ type ``resolvePath`` () =
         let prod = createProd()
 
         Paths.resolvePath prod
-        |> should equal ("product/" + prod.MachineName)
+        |> should equal ("product/" + "") // prod.MachineName)
 
 
     [<Test>]

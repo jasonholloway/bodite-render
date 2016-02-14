@@ -66,9 +66,9 @@ let createCatJson branching depth =
 let private createProd catKeys =
     {
         Key = System.Guid.NewGuid().ToString()
-        Name = { LV = None; RU = None }
-        Description = { LV = None; RU = None }
-        MachineName = ""
+        Name = LocaleString [] 
+        Description = LocaleString []
+        //MachineName = ""
         CategoryKeys = catKeys
     }
     

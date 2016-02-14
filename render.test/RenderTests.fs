@@ -38,7 +38,7 @@ type TestPage () =
     inherit Page("Test")
 
     override Page.Path = ""
-    override Page.Locale = Locale.LV
+    override Page.Locale = Locales.LV
     override Page.Title = "Hello"
 
 

@@ -1,9 +1,20 @@
 ﻿namespace BoditeRender
 
+open System
 
-type Locale =
-    | LV = 0
-    | RU = 1
+type Locale (code: string) =
+    member x.Code = code
+
+    interface IComparable with
+        member x.CompareTo (o: obj) =
+            x.Code.CompareTo( (o :?> Locale).Code )
+
+
+
+module Locales =
+    let LV = Locale "LV"
+    let RU = Locale "RU"
+   
 
 
 type LocaleString (entries: (Locale * string) list) = 

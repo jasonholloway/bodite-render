@@ -31,7 +31,7 @@ module Hydrator =
     let internal hydrateProducts (json: string) =
     
         let buildLocaleString (o: ProductDbView.Name) =        
-            LocaleString ((Locale.LV, o.Lv) :: (if o.Ru.IsSome then [(Locale.RU, o.Ru.Value)] else []))
+            LocaleString ((Locales.LV, o.Lv) :: (if o.Ru.IsSome then [(Locales.RU, o.Ru.Value)] else []))
             
 
         ProductDbView.Parse(json).Rows        
@@ -70,7 +70,7 @@ module Hydrator =
     let private DbRow2CatRecord (r: CategoryDbView.Row) = 
         { 
             Key = if r.Key.Guid.IsSome then r.Key.Guid.Value.ToString() else r.Key.String.Value
-            Name = LocaleString ((Locale.LV, r.Value.Name.Value.Lv) :: []) //if r.Value.Name.IsSome then [(Locale.RU, r.Value.Name.Value)] else [] );
+            Name = LocaleString ((Locales.LV, r.Value.Name.Value.Lv) :: []) //if r.Value.Name.IsSome then [(Locale.RU, r.Value.Name.Value)] else [] );
             Description = LocaleString [];
             ChildKeys = r.Value.Children |> Array.map (fun g -> g.ToString()) |> Array.toList
         }

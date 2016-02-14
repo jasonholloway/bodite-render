@@ -60,7 +60,7 @@ type CategoryPage (cat: Category, locale) =
 module Pages =
    
     let buildHomePage (m: Model) (pages: Page list) =        
-        (HomePage(Locale.LV) :> Page) :: pages
+        (HomePage(Locales.LV) :> Page) :: pages
 
 
     let buildCategoryPages (m: Model) (pages: Page list) =

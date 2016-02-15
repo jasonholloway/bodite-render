@@ -52,7 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="HomePage.cshtml" />
     <None Include="packages.config" />
+    <None Include="CategoryPage.cshtml" />
     <None Include="ProductPage.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>

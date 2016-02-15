@@ -59,66 +59,41 @@ type CategoryPage (cat: Category, locale) =
 
 module Pages =
    
-    let buildHomePage (m: Model) (pages: Page list) =        
-        (HomePage(Locales.LV) :> Page) :: pages
+    let buildHomePage (m: Model) =        
+        [for l in Locales.All -> (HomePage l) :> Page]
 
 
-    let buildCategoryPages (m: Model) (pages: Page list) =
-        pages
+    let buildCategoryPages (m: Model) =
+        Locales.All
+        |> List.collect (fun l ->  
+                            [for (_, c) in (Map.toSeq m.Categories) ->
+                                CategoryPage(c, l) :> Page
+                                ]
+                            )
 
 
-    let buildProductPages (m: Model) (pages: Page list) =
-        pages
+
+    let buildProductPages (m: Model) =
+        Locales.All
+        |> List.collect (fun l ->
+                            m.Categories
+                            |> Map.toSeq
+                            |> Seq.collect (fun (_, c) ->
+                                                c.Products
+                                                |> Seq.map (fun p -> ProductPage(p, c, l) :> Page) )
+                            |> Seq.toList )
 
 
-    let buildPages (m: Model) =
-        []
-        |> buildHomePage m
-        |> buildCategoryPages m
-        |> buildProductPages m
+    let buildPages (m: Model) =        
+        [
+            buildHomePage m
+            buildCategoryPages m
+            buildProductPages m
+        ]
+        |> List.concat
 
         //now build pather from each page's associated model sack
         //...
 
 
-
-//    let buildPages (m: Model) =    
-//        seq {
-//            yield new HomePage() :> Page
-//
-//            yield! m.Categories
-//                    |> Map.toSeq
-//                    |> Seq.collect (fun kc -> seq { 
-//                                                let _, c = kc 
-//
-//                                                yield new CategoryPage(c) :> Page
-//
-//                                                yield! c.Products 
-//                                                       |> Seq.map (fun p -> new ProductPage(p, c) :> Page) 
-//
-//                                                })
-//
-//            //...
-//        }
-//        |> Seq.toList
-
-
-
-
-
-
-
-
-    //should be one page per product*category combination
-    //plus category field should be filled in here...
-
-    //
-    //let getProductPages =
-    //    Data.getAllProducts
-    //    |> Seq.filter (fun p -> p.MachineName.IsSome)
-    //    |> Seq.map (fun p -> {
-    //                            path = if p.MachineName.IsSome then ("produkti/" + p.MachineName.Value) else "";
-    //                            title = "Brigitas Bodite - Produkti - " + p.Name.Lv;  
-    //                            product = p;
-    //                            category = 13;
-    //                        })
+        

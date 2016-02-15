@@ -72,7 +72,8 @@ type ``buildPages`` () =
         |> Seq.length |> should equal ((model.Products 
                                             |> Map.toSeq 
                                             |> Seq.collect (fun (_, p) -> p.CategoryKeys) 
-                                            |> Seq.length) * Enum.GetValues(typeof<Locale>).Length)
+                                            |> Seq.length) 
+                                        * Locales.All.Length)
 
 
     [<Test>]
@@ -80,15 +81,15 @@ type ``buildPages`` () =
         model
         |> Pages.buildPages
         |> Seq.filter ofType<CategoryPage>
-        |> Seq.length |> should equal (model.Categories.Count * Enum.GetValues(typeof<Locale>).Length)
+        |> Seq.length |> should equal (model.Categories.Count * Locales.All.Length)
 
 
 
     [<Test>]
-    member x.``builds one unique HomePage`` () =
+    member x.``builds one HomePage per Locale`` () =
         new Model()
         |> Pages.buildPages
         |> Seq.filter ofType<HomePage>
-        |> Seq.length |> should equal 1
+        |> Seq.length |> should equal Locales.All.Length
 
 

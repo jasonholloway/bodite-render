@@ -14,6 +14,8 @@ type Locale (code: string) =
 module Locales =
     let LV = Locale "LV"
     let RU = Locale "RU"
+
+    let All = [LV; RU]
    
 
 

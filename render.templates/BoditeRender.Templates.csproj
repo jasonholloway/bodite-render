@@ -7,8 +7,8 @@
     <ProjectGuid>{DA72A245-4463-407B-BD98-D963A77B2342}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>render.templates</RootNamespace>
-    <AssemblyName>render.templates</AssemblyName>
+    <RootNamespace>BoditeRender.Templates</RootNamespace>
+    <AssemblyName>BoditeRender.Templates</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -59,19 +59,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\render\render.fsproj">
+    <ProjectReference Include="..\render\BoditeRender.fsproj">
       <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
-      <Name>render</Name>
+      <Name>BoditeRender</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
-
   <Target Name="RenameRenderExe" AfterTargets="Build">
-    <Exec Command="copy $(ProjectDir)bin\render.exe $(ProjectDir)bin\render.dll"></Exec>
-    <Exec Command="del /Q $(ProjectDir)bin\render.exe"></Exec>
+    <Exec Command="copy $(ProjectDir)bin\render.exe $(ProjectDir)bin\render.dll">
+    </Exec>
+    <Exec Command="del /Q $(ProjectDir)bin\render.exe">
+    </Exec>
   </Target>
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

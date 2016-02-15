@@ -6,9 +6,10 @@
     <ProjectGuid>{251417B4-8151-4EEC-A3F2-225D44A419A4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>render</RootNamespace>
-    <AssemblyName>render</AssemblyName>
+    <AssemblyName>BoditeRender</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <Name>BoditeRender</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>

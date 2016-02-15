@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="product.cshtml" />
+    <None Include="ProductPage.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

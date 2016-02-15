@@ -69,22 +69,3 @@ type Renderer (templateResolver: string -> string) =
         |> Seq.collect (fun p -> p |> x.renderPage) 
         |> Seq.toList
 
-
-
-module Render =
-
-    let getFSResolver dirPath =
-        fun relPath -> 
-            use file = File.OpenRead (Path.Combine(dirPath, relPath))
-            use reader = new StreamReader(file)
-            reader.ReadToEnd()
-            
-
-    let getFSCommitter dirPath =
-        fun (vf: VirtFile) ->
-            let blitter = Shared.getBlitter (Array.zeroCreate<byte>(4096))
-
-            use sFile = File.Create (Path.Combine(dirPath, vf.Path))
-            
-            vf.Data
-            |> blitter sFile

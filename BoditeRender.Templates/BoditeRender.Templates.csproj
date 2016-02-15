@@ -59,9 +59,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoditeRender\BoditeRender.fsproj">
+    <ProjectReference Include="..\BoditeRender.Lib\BoditeRender.Lib.fsproj">
       <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
-      <Name>BoditeRender</Name>
+      <Name>BoditeRender.Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

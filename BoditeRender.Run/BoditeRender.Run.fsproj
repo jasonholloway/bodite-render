@@ -53,8 +53,8 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoditeRender\BoditeRender.fsproj">
-      <Name>BoditeRender</Name>
+    <ProjectReference Include="..\BoditeRender\BoditeRender.Lib.fsproj">
+      <Name>BoditeRender.Lib</Name>
       <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
       <Private>True</Private>
     </ProjectReference>

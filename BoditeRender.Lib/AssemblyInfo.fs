@@ -3,7 +3,7 @@
 open System.Reflection
 open System.Runtime.CompilerServices
 
-[<assembly:AssemblyTitle("render")>]
+[<assembly:AssemblyTitle("BoditeRender.Lib")>]
 [<assembly:AssemblyDescription("")>]
 [<assembly:AssemblyConfiguration("")>]
 [<assembly:AssemblyCompany("")>]
@@ -11,7 +11,7 @@ open System.Runtime.CompilerServices
 [<assembly:AssemblyCopyright("jason")>]
 [<assembly:AssemblyTrademark("")>]
 [<assembly:AssemblyVersion("1.0.0.0")>]
-[<assembly:InternalsVisibleTo("render.test")>]
+[<assembly:InternalsVisibleTo("BoditeRender.Lib.Tests")>]
 ()
 // The assembly version has the format {Major}.{Minor}.{Build}.{Revision}
 //[<assembly: AssemblyDelaySign(false)>]

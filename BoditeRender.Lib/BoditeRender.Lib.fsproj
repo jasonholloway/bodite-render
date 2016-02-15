@@ -36,8 +36,10 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Shared.fs" />
     <Compile Include="Locale.fs" />
+    <Compile Include="DbModel.fs" />
+    <Compile Include="CouchDbLoader.fs" />
     <Compile Include="Model.fs" />
-    <Compile Include="Hydrator.fs" />
+    <Compile Include="Hydrate.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Render.fs" />
@@ -60,7 +62,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RazorEngine">

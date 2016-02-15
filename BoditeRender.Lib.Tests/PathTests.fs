@@ -20,7 +20,7 @@ let createCat () =
 
 let createProd () =
     {
-        Key = System.Guid.NewGuid().ToString()
+        Product.Key = System.Guid.NewGuid().ToString()
         Name = LocaleString []
         Description = LocaleString []
 //        MachineName = "kjhkjhuhu"

@@ -2,10 +2,9 @@
 
 open FSharp.Data
 open System.Text.RegularExpressions
-    
 
 
-module Hydrator =
+module Hydrate =
 
 #if RELEASE
     [<Literal>]
@@ -16,35 +15,42 @@ module Hydrator =
 #endif
 
 
-
-
-
-
     //////////////////////////////////////////////////
     // PRODUCTS /////////////////////////////////////
              
-    [<Literal>]
-    let allProductsUrl = dbUrl + "/_design/bb/_view/all-products"
 
-    type ProductDbView = JsonProvider<allProductsUrl>
-    
-    let internal hydrateProducts (json: string) =
-    
-        let buildLocaleString (o: ProductDbView.Name) =        
-            LocaleString ((Locales.LV, o.Lv) :: (if o.Ru.IsSome then [(Locales.RU, o.Ru.Value)] else []))
-            
+    let loadDbProducts json =
+        0
 
-        ProductDbView.Parse(json).Rows        
-        |> Seq.map (fun r -> 
-                        {
-                            Key = Regex.Match(r.Value.Id, "^product[\/-](.+)").Value
-                            Name = buildLocaleString r.Value.Name
-                            Description = LocaleString []
-                            CategoryKeys = r.Value.CategoryKeys |> Seq.map (fun g -> g.ToString()) |> Seq.toList
-                        }
-                    )
-        |> Seq.map (fun p -> (p.Key, p))
-        |> Map.ofSeq
+
+    let hydrateProducts dbProds =
+        0 
+
+
+
+//
+//    [<Literal>]
+//    let allProductsUrl = dbUrl + "/_design/bb/_view/all-products"
+//
+//    type ProductDbView = JsonProvider<allProductsUrl>
+//    
+//    let internal hydrateProds (json: string) =
+//    
+//        let buildLocaleString (o: ProductDbView.Name) =        
+//            LocaleString ((Locales.LV, o.Lv) :: (if o.Ru.IsSome then [(Locales.RU, o.Ru.Value)] else []))
+//            
+//
+//        ProductDbView.Parse(json).Rows        
+//        |> Seq.map (fun r -> 
+//                        {
+//                            Key = Regex.Match(r.Value.Id, "^product[\/-](.+)").Value
+//                            Name = buildLocaleString r.Value.Name
+//                            Description = LocaleString []
+//                            CategoryKeys = r.Value.CategoryKeys |> Seq.map (fun g -> g.ToString()) |> Seq.toList
+//                        }
+//                    )
+//        |> Seq.map (fun p -> (p.Key, p))
+//        |> Map.ofSeq
 
 
 
@@ -134,10 +140,10 @@ module Hydrator =
 
 
     let hydrateModel () =
-        let prods = hydrateProducts allProductsUrl
-        let cats = hydrateCategories allCategoriesUrl prods
-
-        Model(prods, cats)
-
+//        let prods = hydrateProds allProductsUrl
+//        let cats = hydrateCategories allCategoriesUrl prods
+//
+//        Model(prods, cats)
+        0
 
 

@@ -19,7 +19,7 @@ let createCategory key prods =
 
 let createProduct catKeys =
     {
-        Key = Guid.NewGuid().ToString()
+        Product.Key = Guid.NewGuid().ToString()
         Name = LocaleString []
         Description = LocaleString []
 //        MachineName = ""

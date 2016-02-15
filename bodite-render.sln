@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BoditeRender", "render\BoditeRender.fsproj", "{251417B4-8151-4EEC-A3F2-225D44A419A4}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BoditeRender", "BoditeRender\BoditeRender.fsproj", "{251417B4-8151-4EEC-A3F2-225D44A419A4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BoditeRender.Tests", "render.test\BoditeRender.Tests.fsproj", "{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BoditeRender.Tests", "BoditeRender.Tests\BoditeRender.Tests.fsproj", "{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoditeRender.Templates", "render.templates\BoditeRender.Templates.csproj", "{DA72A245-4463-407B-BD98-D963A77B2342}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoditeRender.Templates", "BoditeRender.Templates\BoditeRender.Templates.csproj", "{DA72A245-4463-407B-BD98-D963A77B2342}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97801A33-3D6D-4B0A-8582-6B497B5326B7}"
 	ProjectSection(SolutionItems) = preProject

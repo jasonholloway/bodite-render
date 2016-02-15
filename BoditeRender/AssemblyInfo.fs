@@ -1,4 +1,4 @@
-﻿module render.AssemblyInfo
+﻿module BoditeRender.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices

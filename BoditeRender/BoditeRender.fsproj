@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{251417B4-8151-4EEC-A3F2-225D44A419A4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>render</RootNamespace>
     <AssemblyName>BoditeRender</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -41,7 +41,6 @@
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Render.fs" />
-    <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <Content Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

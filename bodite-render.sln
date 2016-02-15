@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		todo.txt = todo.txt
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BoditeRender.Run", "BoditeRender.Run\BoditeRender.Run.fsproj", "{15861094-D277-4C90-AF9B-B31E21A33D25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,14 @@ Global
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA72A245-4463-407B-BD98-D963A77B2342}.Release|x86.Build.0 = Release|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Debug|x86.Build.0 = Debug|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Release|x86.ActiveCfg = Release|Any CPU
+		{15861094-D277-4C90-AF9B-B31E21A33D25}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

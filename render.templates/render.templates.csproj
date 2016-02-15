@@ -54,8 +54,24 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="product.cshtml" />
+    <None Include="Web.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\render\render.fsproj">
+      <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
+      <Name>render</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+
+  <Target Name="RenameRenderExe" AfterTargets="Build">
+    <Exec Command="copy $(ProjectDir)bin\render.exe $(ProjectDir)bin\render.dll"></Exec>
+    <Exec Command="del /Q $(ProjectDir)bin\render.exe"></Exec>
+  </Target>
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

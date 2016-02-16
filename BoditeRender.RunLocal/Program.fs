@@ -6,7 +6,7 @@ let main argv =
 
     let committer = FSCommitter.create (System.IO.Directory.GetCurrentDirectory())
         
-    Hydrator.hydrateModel()
+    Hydrate.hydrateModel()
     |> Pages.buildPages
     |> Renderer(resolver).renderPages
     |> Seq.iter (fun f -> committer f)

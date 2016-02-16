@@ -5,24 +5,7 @@ module CouchDbLoader =
     open Newtonsoft.Json
     open FSharp.Data
     open System
-    open System.Text.RegularExpressions
 
-    
-#if RELEASE
-    [<Literal>]
-    let dbUrl = "https://jasonholloway.cloudant.com/bb"
-#else
-    [<Literal>]
-    let dbUrl = "http://localhost:5984/bb"
-#endif
-
-
-
-    [<Literal>]
-    let allProductsUrl = dbUrl + "/_design/bb/_view/all-products"
-
-    type ProductDbView = JsonProvider<allProductsUrl>
-        
 
     type CouchProduct = {
         Id: string
@@ -48,8 +31,6 @@ module CouchDbLoader =
     }
 
     
-
-
 
     let loadProducts (json : string) =
         let v = JsonConvert.DeserializeObject<CouchView<CouchProduct>>(json)
@@ -78,16 +59,4 @@ module CouchDbLoader =
                             }
                         )
 
-
-
-
-
-//FUCK
-//
-// Couch deserialization...
-//
-//  should use the old typeproviders... at least now such usage has been wrapped
-//
-//
-//
-
+                        

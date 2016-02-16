@@ -1,79 +1,100 @@
 ﻿module Hydrate
-//
-//open System
-//open NUnit.Framework
-//open FsUnit
-//open FSharp.Data
-//
-//open BoditeRender
-//open Hydrate
-//open Json
-//
-//
-//type CatNode = {
-//    Key: string
-//    Children: CatNode list
-//} 
-//
-//
-//let createCatJson branching depth =
-//    //first create simple cat tree to ensure parent-child integrity; then flatten tree immediately
-//    let rec createCatBranch isRoot b d =
-//        {
-//            Key = if isRoot then "root" else Guid.NewGuid().ToString()
-//            Children = match d with
-//                        | 0 -> []
-//                        | _ -> [0..b] |> List.map (fun _ -> createCatBranch false b (d - 1))
-//        }
-//        
-//    let rootNode = createCatBranch true branching depth
-//
-//    let nodes = Helpers.flatten
-//                            (fun n -> n.Children)
-//                            rootNode
-//
-//    let json = 
-//        JObj [
-//            JProp("total_rows", !! (nodes |> Seq.length))
-//            JProp("offset", !! 0)
-//            JProp(
-//                "rows", 
-//                JArr (nodes |> Seq.map (fun n -> 
-//                                            JObj [
-//                                                JProp("id", !! "")
-//                                                JProp("key", !! n.Key)
-//                                                JProp("value", JObj [                    
-//                                                                JProp("_id", !! "")
-//                                                                JProp("_rev", !! "")    
-//                                                                JProp("name", JObj [
-//                                                                                JProp("LV", !! "") 
-//                                                                                ])                                                                                
-//                                                                JProp("description", JObj [
-//                                                                                        JProp("LV", !! "") 
-//                                                                                        ])
-//                                                                JProp("children", JArr (n.Children |> Seq.map (fun k -> !! k.Key)))
-//                                                                ])
-//                                            ]
-//                                            )))
-//        ]
-//     
-//    let jsonString = (json |> toJson).ToString()
-//    
-//    ( rootNode, jsonString )
-//
-//    
-//
-//let private createProd catKeys =
-//    {
-//        Key = System.Guid.NewGuid().ToString()
-//        Name = LocaleString [] 
-//        Description = LocaleString []
-//        //MachineName = ""
-//        CategoryKeys = catKeys
-//    }
-//    
-//
-//
+
+open System
+open NUnit.Framework
+open FsUnit
+open FSharp.Data
+
+open BoditeRender
+open Hydrate
+open Json
+
+
+type CatNode = {
+    Key: string
+    Children: CatNode list
+} 
+
+
+let createCatJson branching depth =
+    //first create simple cat tree to ensure parent-child integrity; then flatten tree immediately
+    let rec createCatBranch isRoot b d =
+        {
+            Key = if isRoot then "root" else Guid.NewGuid().ToString()
+            Children = match d with
+                        | 0 -> []
+                        | _ -> [0..b] |> List.map (fun _ -> createCatBranch false b (d - 1))
+        }
+        
+    let rootNode = createCatBranch true branching depth
+
+    let dbCats = Helpers.flatten (fun n -> n.Children) rootNode
+                 |> Seq.map (fun n -> {
+                                        DbCategory.Key = n.Key
+                                        Name = Map.empty
+                                        ChildKeys = n.Children
+                                                    |> List.map (fun c -> c.Key)
+                                        }) 
+                 |> Seq.toList
+                     
+    ( rootNode, dbCats )
+
+    
+
+let private createDbProduct catKeys =
+    {
+        DbProduct.Key = System.Guid.NewGuid().ToString()
+        Name = Map.empty
+        Description = Map.empty
+        //MachineName = ""
+        CategoryKeys = catKeys
+    }
+    
+
+
+
+
+[<TestFixture>]
+type ``hydrateLocaleString`` () = 
+    
+    [<Test>]
+    member x.``suppresses unrecognised locale codes, while exposing proper ones`` () =
+        let l = Locales.All.Head
+
+        let m = Map<string, string>([
+                                        (l.Code, "Blah")
+                                        ("ZZ", "ARGH")
+                                    ])  
+
+        let s = Hydrate.hydrateLocaleString m
+
+        s.get(l).IsSome |> should equal true
+
+
+
+[<TestFixture>]
+type ``hydrateProducts`` () =
+    
+    [<Test>]
+    member x.``returns one Product per DbProduct, with keys`` () =
+        let dbProds = [0..20]
+                      |> List.map (fun i -> createDbProduct [])
+
+        let prods = Hydrate.hydrateProducts dbProds
+
+        dbProds 
+        |> List.map (fun p -> p.Key) 
+        |> Set.ofList
+        |> should equal (prods 
+                         |> List.map (fun p -> p.Key) 
+                         |> Set.ofList)
+        
+        
+
+
+
+
+
 //[<TestFixture>]
 //type ``hydrateCategories`` () =
 //    [<Test>]

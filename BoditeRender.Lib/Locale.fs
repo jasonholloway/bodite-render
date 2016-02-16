@@ -16,14 +16,25 @@ module Locales =
     let RU = Locale "RU"
 
     let All = [LV; RU]
+
+
+    let private _m = All 
+                     |> List.map (fun l -> (l.Code, l)) 
+                     |> Map.ofList 
+
+    let getByKey k =
+        _m.TryFind k
+        
    
 
 
-type LocaleString (entries: (Locale * string) list) = 
-    let map = entries |> Map.ofList
+type LocaleString (m: Map<Locale, string>) =
+
+    new(entries: (Locale * string) list) = 
+        LocaleString(entries |> Map.ofList)
 
     member x.get locale =
-        match map.TryFind(locale) with
+        match m.TryFind(locale) with
         | Some s -> Some s
         | None -> None //should try to get default first...
         

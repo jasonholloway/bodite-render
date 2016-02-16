@@ -3,11 +3,17 @@
 open System.IO
 open BoditeRender
 
-let create dirPath =
+let create baseDirPath =
     fun (vf: VirtFile) ->
         let blitter = Shared.getBlitter (Array.zeroCreate<byte>(4096))
 
-        use sFile = File.Create (Path.Combine(dirPath, vf.Path))
+        let path = Path.Combine (baseDirPath, vf.Path)
+        let dirPath = Path.GetDirectoryName(path)
+
+        if not <| Directory.Exists(dirPath) then
+           Directory.CreateDirectory(dirPath) |> ignore 
+
+        use sFile = File.Create(path)
             
         vf.Data
         |> blitter sFile

@@ -39,3 +39,46 @@ module RunLocal =
 
             File.ReadAllText(Path.Combine(folder.Path, vf.Path))
             |> should equal "blarg"
+
+        
+        [<Test>]
+        member x.``creates intermediate folders if not existent, then commits`` () =
+            use folder = new Helpers.TempFolder()
+
+            let committer = FSCommitter.create folder.Path
+                    
+            use vf = new VirtFile("blarg/oof/file.html", "blarg")
+                       
+            committer vf 
+            |> ignore
+
+
+            Directory.Exists(Path.Combine(folder.Path, "blarg"))
+            |> should equal true
+            
+            Directory.Exists(Path.Combine(folder.Path, "blarg", "oof"))
+            |> should equal true
+            
+            File.ReadAllText(Path.Combine(folder.Path, vf.Path))
+            |> should equal "blarg"
+
+            
+        [<Test>]
+        member x.``commits into intermediate folders if existent`` () =
+            use folder = new Helpers.TempFolder()
+
+            let committer = FSCommitter.create folder.Path
+            
+            Directory.CreateDirectory(Path.Combine(folder.Path, "krunk"))
+            |> ignore
+            
+            use vf = new VirtFile("krunk/file.html", "blarg")
+                       
+            committer vf 
+            |> ignore
+            
+            Directory.Exists(Path.Combine(folder.Path, "krunk"))
+            |> should equal true
+            
+            File.ReadAllText(Path.Combine(folder.Path, vf.Path))
+            |> should equal "blarg"

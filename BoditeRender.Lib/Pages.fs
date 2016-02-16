@@ -24,7 +24,7 @@ type HomePage (locale) =
     inherit Page(["Index", locale])
 
     override Page.Locale = locale
-    override Page.Path = ""
+    override Page.Path = "index"
     override Page.Title = "Brigitas Bodite"
 
     member val FeaturedProducts : List<Product> = List.empty
@@ -36,7 +36,7 @@ type ProductPage (prod: Product, cat: Category, locale) =
     inherit Page([cat, prod, locale])
     
     override Page.Locale = locale
-    override Page.Path = "blah"
+    override Page.Path = "product-" + prod.Key
     override Page.Title = defaultArg (prod.Name.get locale) ""
     
     member val Product = prod
@@ -49,7 +49,7 @@ type CategoryPage (cat: Category, locale) =
     inherit Page([cat, locale])
     
     override Page.Locale = locale
-    override Page.Path = "category/" + cat.Key
+    override Page.Path = "category-" + cat.Key
     override Page.Title = defaultArg (cat.Name.get locale) ""
     
     member val Category = cat

@@ -15,6 +15,8 @@ module Locales =
     let LV = Locale "LV"
     let RU = Locale "RU"
 
+    let Default = LV
+
     let All = [LV; RU]
 
 
@@ -36,5 +38,5 @@ type LocaleString (m: Map<Locale, string>) =
     member x.get locale =
         match m.TryFind(locale) with
         | Some s -> Some s
-        | None -> None //should try to get default first...
+        | None -> if locale.Equals(Locales.Default) then None else x.get(Locales.Default)  //should try to get default first...
         

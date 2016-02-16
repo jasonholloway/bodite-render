@@ -41,6 +41,9 @@ module CouchDbLoader =
                             OptionConverter() :> JsonConverter
                          |]
 
+    let defaultNull subject def =
+        if obj.Equals(subject, null) then def else subject
+
 
     let loadProducts (json : string) =
         let v = JsonConvert.DeserializeObject<CouchView<CouchProduct>>(json, converters=jsonConverters)
@@ -49,8 +52,8 @@ module CouchDbLoader =
         |> List.map (fun r ->
                             {
                                 DbProduct.Key = r.Key
-                                Name = r.Value.Name
-                                Description = r.Value.Description
+                                Name = defaultNull r.Value.Name Map.empty
+                                Description = defaultNull r.Value.Description Map.empty
                                 CategoryKeys = r.Value.CategoryKeys
                             }
                         )
@@ -64,7 +67,7 @@ module CouchDbLoader =
         |> List.map (fun r ->
                             {
                                 DbCategory.Key = r.Key
-                                Name = r.Value.Name
+                                Name = defaultNull r.Value.Name Map.empty
                                 ChildKeys = defaultArg r.Value.Children []
                             }
                         )
@@ -78,7 +81,7 @@ module CouchDbLoader =
         let allCategoriesRelUrl = "_design/bb/_view/all-categories"
         
         let categories = Http.RequestString(
-                                    Url.Combine(baseUrl, allProductsRelUrl),
+                                    Url.Combine(baseUrl, allCategoriesRelUrl),
                                     httpMethod="GET",
                                     headers=[("Accept", "application/json")]
                                     )

@@ -94,6 +94,48 @@ type ``loadProducts`` () =
         |> Seq.map (fun p -> p.Key)
         |> should equal keys
 
+    
+    [<Test>]
+    member x.``null Name defaults to empty map`` () =
+        let dbProds = CouchDbLoader.loadProducts @"{
+                                                        ""rows"": [  
+                                                            {
+                                                                ""key"": ""8768767"",
+                                                                ""value"": {
+                                                                    ""_id"": ""lkjlkjlkjl"",
+                                                                    ""_rev"": ""1287398273982173""                                                                    
+                                                                }
+                                                            }
+                                                        ] 
+                                                    }"
+        dbProds.Length |> should equal 1
+        dbProds.Head.Name.Count |> should equal 0
+
+
+    [<Test>]
+    member x.``null Description defaults to empty map`` () =
+        let dbProds = CouchDbLoader.loadProducts @"{
+                                                        ""rows"": [  
+                                                            {
+                                                                ""key"": ""8768767"",
+                                                                ""value"": {
+                                                                    ""_id"": ""lkjlkjlkjl"",
+                                                                    ""_rev"": ""1287398273982173""                                                                    
+                                                                }
+                                                            }
+                                                        ] 
+                                                    }"
+        dbProds.Length |> should equal 1
+        dbProds.Head.Description.Count |> should equal 0
+
+
+
+
+
+
+
+
+
 
 
 
@@ -169,4 +211,20 @@ type ``loadCategories`` () =
         dbCats.Length |> should equal 1
         dbCats.Head.ChildKeys |> should equal []
 
+    
+    [<Test>]
+    member x.``null Name defaults to empty map`` () =
+        let dbCats = CouchDbLoader.loadCategories @"{
+                                                        ""rows"": [  
+                                                            {
+                                                                ""key"": ""8768767"",
+                                                                ""value"": {
+                                                                    ""_id"": ""lkjlkjlkjl"",
+                                                                    ""_rev"": ""1287398273982173""                                                                    
+                                                                }
+                                                            }
+                                                        ] 
+                                                    }"
+        dbCats.Length |> should equal 1
+        dbCats.Head.Name.Count |> should equal 0
 

@@ -16,6 +16,14 @@ type CatNode = {
 } 
 
 
+let createDbCat k childKeys =
+    {
+        DbCategory.Key = k
+        Name = Map.empty
+        ChildKeys = childKeys
+    }
+
+
 let createDbCats branching depth =
     //first create simple cat tree to ensure parent-child integrity; then flatten tree immediately
     let rec createCatBranch isRoot b d =
@@ -29,12 +37,8 @@ let createDbCats branching depth =
     let rootNode = createCatBranch true branching depth
 
     let dbCats = Helpers.flatten (fun n -> n.Children) rootNode
-                 |> Seq.map (fun n -> {
-                                        DbCategory.Key = n.Key
-                                        Name = Map.empty
-                                        ChildKeys = n.Children
-                                                    |> List.map (fun c -> c.Key)
-                                        }) 
+                 |> Seq.map (fun n -> createDbCat n.Key (n.Children
+                                                         |> List.map (fun c -> c.Key))) 
                  |> Seq.toList
                      
     ( rootNode, dbCats )
@@ -57,6 +61,53 @@ let private createProduct catKeys =
         Description = LocaleString []
         CategoryKeys = catKeys
     }
+
+let private createCat () =
+    {
+        Category.Key = System.Guid.NewGuid().ToString()
+        Name = LocaleString []
+        Description = LocaleString []
+        Children = []
+        Products = []
+    }
+
+
+
+
+[<TestFixture>]
+type ``hydrateModel`` () =
+    
+    [<Test>]
+    member x.``Exposes map of cats`` () =    
+        let dbModel = DbModel(categories=([0..50] |> List.map (fun i -> createDbCat (i.ToString()) [])))
+
+        let model = dbModel |> Hydrate.hydrateModel
+
+        model.Categories
+        |> Map.toSeq
+        |> Seq.map (fun (_, c) -> c.Key)
+        |> Set.ofSeq
+        |> should equal (dbModel.Categories
+                         |> Seq.map (fun c -> c.Key)
+                         |> Set.ofSeq)
+
+
+
+        
+    [<Test>]
+    member x.``Exposes map of prods`` () =
+        let dbModel = DbModel(products=( [0..50] |> List.map (fun i -> createDbProduct([])) ))
+
+        let model = dbModel |> Hydrate.hydrateModel
+
+        model.Products
+        |> Map.toSeq
+        |> Seq.map (fun (_, p) -> p.Key)
+        |> Set.ofSeq
+        |> should equal (dbModel.Products
+                         |> Seq.map (fun p -> p.Key)
+                         |> Set.ofSeq)
+
 
 
 

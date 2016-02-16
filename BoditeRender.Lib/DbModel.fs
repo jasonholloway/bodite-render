@@ -21,5 +21,5 @@ type DbCategory = {
 
 
 type DbModel (?categories : DbCategory list, ?products : DbProduct list) =
-    member x.Categories = categories
-    member x.Products = products
+    member x.Categories = defaultArg categories []
+    member x.Products = defaultArg products []

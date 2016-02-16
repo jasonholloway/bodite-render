@@ -16,7 +16,7 @@ type CatNode = {
 } 
 
 
-let createCatJson branching depth =
+let createDbCats branching depth =
     //first create simple cat tree to ensure parent-child integrity; then flatten tree immediately
     let rec createCatBranch isRoot b d =
         {
@@ -50,6 +50,13 @@ let private createDbProduct catKeys =
         CategoryKeys = catKeys
     }
     
+let private createProduct catKeys =
+    {
+        Product.Key = System.Guid.NewGuid().ToString()
+        Name = LocaleString []
+        Description = LocaleString []
+        CategoryKeys = catKeys
+    }
 
 
 
@@ -92,62 +99,65 @@ type ``hydrateProducts`` () =
         
 
 
+[<TestFixture>]
+type ``hydrateCategories`` () =
+    [<Test>]
+    member x.``emits entire tree of cats`` () =
+        let _, dbCats = createDbCats 3 4
+                
+        let dbKeys = dbCats 
+                     |> List.map (fun c -> c.Key)
+                     |> Set.ofSeq
+    
+        let builtKeys = dbCats
+                        |> Hydrate.hydrateCategories Map.empty
+                        |> Seq.map (fun c -> c.Key)
+                        |> Set.ofSeq
+
+        builtKeys |> should equal dbKeys
 
 
 
-//[<TestFixture>]
-//type ``hydrateCategories`` () =
-//    [<Test>]
-//    member x.``includes all cats in map`` () =
-//        let root, json = createCatJson 3 4
-//                
-//        let jsonKeys = (Helpers.flatten (fun n -> n.Children) root) 
-//                        |> Seq.map (fun n -> n.Key)
-//                        |> Set.ofSeq
-//    
-//        let builtKeys = Hydrate.hydrateCategories json Map.empty 
-//                        |> Map.toSeq
-//                        |> Seq.map (fun kv -> match kv with (k, v) -> k)
-//                        |> Set.ofSeq
-//
-//        builtKeys |> should equal jsonKeys
-//
-//
-//    [<Test>]
-//    member x.``articulates cat children in hierarchically correct manner`` () =
-//        let root, json = createCatJson 3 4
-//
-//        let srcNodes = (Helpers.flatten (fun n -> n.Children) root)
-//                        
-//        let builtNodes = (Hydrate.hydrateCategories json Map.empty).["root"]
-//                         |> Helpers.flatten (fun n -> n.Children)
-//
-//        srcNodes 
-//        |> Seq.zip builtNodes
-//        |> Seq.iter (fun (srcNode, builtNode) -> 
-//                            srcNode.Key |> should equal builtNode.Key
-//
-//                            let srcChildKeys = srcNode.Children
-//                                                |> List.map (fun c -> c.Key)
-//
-//                            let builtChildKeys = builtNode.Children
-//                                                    |> List.map (fun c -> c.Key)
-//
-//                            builtChildKeys |> should equal srcChildKeys
-//                            )
-//
-//
-//
-//    [<Test>]
-//    member x.``groups products per cat`` () =
-//        let root, json = createCatJson 3 4
-//
-//        let catNodes = Helpers.flatten (fun n -> n.Children) root
-//                    
-//        let prods = catNodes 
-//                    |> Seq.collect (fun c -> [0..4] |> Seq.map (fun _ -> createProd [c.Key])) 
-//                    |> Seq.map (fun p -> (p.Key, p))
-//                    |> Map.ofSeq
-//
-//        Hydrate.hydrateCategories json prods
-//        |> Map.iter (fun k c -> c.Products.Length |> should equal 5)
+
+
+    [<Test>]
+    member x.``groups products per cat`` () =
+        let _, dbCats = createDbCats 3 4
+            
+        let prodMap = dbCats 
+                        |> Seq.collect (fun c -> [0..4] |> Seq.map (fun _ -> createProduct [c.Key])) 
+                        |> Seq.map (fun p -> (p.Key, p))
+                        |> Map.ofSeq
+
+        dbCats
+        |> Hydrate.hydrateCategories prodMap
+        |> List.iter (fun c -> c.Products.Length |> should equal 5)
+
+
+
+    [<Test>]
+    member x.``articulates cat children in hierarchically correct manner`` () =
+        let rootSpec, dbCats = createDbCats 3 4
+
+        let specs = (Helpers.flatten (fun n -> n.Children) rootSpec)
+                        
+        let cats = dbCats
+                   |> Hydrate.hydrateCategories Map.empty
+                   |> Seq.find (fun c -> c.Key.Equals("root"))
+                   |> Helpers.flatten (fun n -> n.Children)
+
+        specs
+        |> Seq.zip cats
+        |> Seq.iter (fun (spec, cat) -> 
+                            spec.Key |> should equal cat.Key
+
+                            let specChildKeys = spec.Children
+                                                |> List.map (fun c -> c.Key)
+
+                            let catChildKeys = cat.Children
+                                                    |> List.map (fun c -> c.Key)
+
+                            catChildKeys |> should equal specChildKeys
+                            )
+
+

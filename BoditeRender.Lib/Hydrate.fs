@@ -5,13 +5,6 @@ open System.Text.RegularExpressions
 
 
 module Hydrate =
-
-
-
-    let hydrateCategories dbCats =
-        0
-
-
         
     let hydrateLocaleString (m: Map<string, string>) = 
         m
@@ -23,14 +16,9 @@ module Hydrate =
         |> (fun newMap -> new LocaleString(newMap))
     
 
-//
-//    [<Literal>]
-//    let allProductsUrl = dbUrl + "/_design/bb/_view/all-products"
-//
-//    type ProductDbView = JsonProvider<allProductsUrl>
-    
-    let internal hydrateProducts (dbProds: DbProduct list) =
-    
+
+
+    let hydrateProducts (dbProds: DbProduct list) =    
         dbProds
         |> List.map (fun p -> {
                                 Product.Key = p.Key
@@ -39,19 +27,56 @@ module Hydrate =
                                 CategoryKeys = p.CategoryKeys
                               })
 
-//
-//
-//        ProductDbView.Parse(json).Rows        
-//        |> Seq.map (fun r -> 
-//                        {
-//                            Key = Regex.Match(r.Value.Id, "^product[\/-](.+)").Value
-//                            Name = buildLocaleString r.Value.Name
-//                            Description = LocaleString []
-//                            CategoryKeys = r.Value.CategoryKeys |> Seq.map (fun g -> g.ToString()) |> Seq.toList
-//                        }
-//                    )
-//        |> Seq.map (fun p -> (p.Key, p))
-//        |> Map.ofSeq
+                              
+                                  
+    let hydrateCategories (prodMap: Map<string, Product>) (dbCats: DbCategory list) =
+    
+        let dbCatMap = dbCats |> Seq.map (fun c -> (c.Key, c)) |> Map.ofSeq
+
+        let prodsByCatMap = prodMap
+                                |> Map.toSeq                                
+                                |> Seq.collect (fun (_, p) -> p.CategoryKeys |> Seq.map (fun catKey -> (catKey, p)))
+                                |> Seq.groupBy (fun (catKey, _) -> catKey)
+                                |> Seq.map (fun (k, r) -> (k, r |> Seq.map (fun (_, p) -> p)) ) 
+                                |> Map.ofSeq
+                              
+                                               
+        let rec rec2Cat (map: Map<string, Category>) (dbCat: DbCategory) =        
+            match map.TryFind(dbCat.Key) with
+            | Some cat -> 
+                    (map, cat)
+            | None ->
+                    let map, children = dbCat.ChildKeys 
+                                        |> List.fold (fun mr k -> 
+                                                        let map, siblings = mr
+                                                        let map, child = rec2Cat map dbCatMap.[k]                                    
+                                                        (map, child :: siblings) 
+                                                     )
+                                                     (map, [])
+                    let cat = {
+                        Category.Key = dbCat.Key
+                        Name = hydrateLocaleString dbCat.Name
+                        Description = LocaleString [] // hydrateLocaleString dbCat.Description
+                        Children = children |> List.rev
+                        Products = match prodsByCatMap.TryFind(dbCat.Key) with
+                                    | Some s -> s |> Seq.toList
+                                    | None -> []
+                    }                
+
+                    let map = map |> Map.add cat.Key cat                
+                
+                    (map, cat)
+                
+        dbCats 
+        |> Seq.fold 
+                (fun m r -> match (rec2Cat m r) with | (m, _) -> m) 
+                Map.empty
+        |> Map.toSeq
+        |> Seq.map (fun (_, c) -> c)
+        |> Seq.toList
+
+
+
 
 
 

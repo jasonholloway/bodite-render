@@ -150,4 +150,23 @@ type ``loadCategories`` () =
         |> should equal specs
 
 
+    [<Test>]
+    member x.``null ChildKeys defaults to empty list`` () =
+        let dbCats = CouchDbLoader.loadCategories @"{
+                                                        ""rows"": [  
+                                                            {
+                                                                ""key"": ""8768767"",
+                                                                ""value"": {
+                                                                    ""_id"": ""lkjlkjlkjl"",
+                                                                    ""_rev"": ""1287398273982173"",
+                                                                    ""name"": {
+                                                                        ""LV"": ""lkjlkjlkj""
+                                                                    }
+                                                                }
+                                                            }
+                                                        ] 
+                                                    }"
+        dbCats.Length |> should equal 1
+        dbCats.Head.ChildKeys |> should equal []
+
 

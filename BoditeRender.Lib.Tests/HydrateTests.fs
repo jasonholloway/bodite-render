@@ -210,5 +210,16 @@ type ``hydrateCategories`` () =
 
                             catChildKeys |> should equal specChildKeys
                             )
-
-
+//
+//    [<Test>]
+//    member x.``handles empty children elegantly`` () =
+//        let dbCats = [{
+//                        DbCategory.Key = Guid.NewGuid().ToString()
+//                        Name = Map.empty
+//                        Children = None
+//                      }]
+//
+//        let cats = dbCats |> Hydrate.hydrateCategories Map.empty
+//
+//        cats.Length |> should equal 1
+//        cats.Head.Children |> should equal []

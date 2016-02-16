@@ -6,7 +6,9 @@ let main argv =
 
     let committer = FSCommitter.create (System.IO.Directory.GetCurrentDirectory())
         
-    Hydrate.hydrateModel()
+            
+    CouchDbLoader.loadDbModel "http://localhost:5984/bb"
+    |> Hydrate.hydrateModel
     |> Pages.buildPages
     |> Renderer(resolver).renderPages
     |> Seq.iter (fun f -> committer f)

@@ -46,7 +46,7 @@ module Hydrate =
             | Some cat -> 
                     (map, cat)
             | None ->
-                    let map, children = dbCat.ChildKeys 
+                    let map, children = dbCat.ChildKeys
                                         |> List.fold (fun mr k -> 
                                                         let map, siblings = mr
                                                         let map, child = rec2Cat map dbCatMap.[k]                                    

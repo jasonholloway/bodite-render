@@ -22,26 +22,24 @@ type PageKey (v: obj) =
 
 
 
-type PageContext = {
-    Locale: Locale
-    Model: Model
-    //FindPage: obj seq -> Page
-}
+type PageContext (model: Model, locale: Locale) = 
+    member x.Model = model
+    member x.Locale = locale
+    member x.GetPath keys = ""
 
 
 
 [<AbstractClass>]
-type Page (ctx: PageContext, keys : Set<PageKey>) =
+type Page (keys: Set<PageKey>) =
 
-    new(ctx, keys : obj seq) =
-        Page(ctx, keys 
-                  |> Seq.map (fun k -> PageKey(k))
-                  |> Set.ofSeq)
+    new(keys : obj seq) =
+        Page(keys 
+             |> Seq.map (fun k -> PageKey(k))
+             |> Set.ofSeq)
 
-    new(ctx, key : obj) =
-        Page(ctx, [key])
+    new(key : obj) =
+        Page([key])
         
-    member val Ctx = ctx
     member val Keys = keys
 
     abstract member Path : string
@@ -50,35 +48,38 @@ type Page (ctx: PageContext, keys : Set<PageKey>) =
 
 
                                                     
-type HomePage (ctx: PageContext) =
-    inherit Page(ctx, ["Index", ctx.Locale])
+type HomePage (locale: Locale) =
+    inherit Page(["Index", locale])
 
     override Page.Path = ""
     override Page.Title = "Brigitas Bodite"
-
+    
+    member val Locale = locale
     member val FeaturedProducts : List<Product> = List.empty
     
 
 
 
-type ProductPage (ctx: PageContext, prod: Product, cat: Category) = 
-    inherit Page(ctx, [cat, prod, ctx.Locale])
+type ProductPage (locale: Locale, prod: Product, cat: Category) = 
+    inherit Page([cat, prod, locale])
     
     override Page.Path = "product/" + prod.Key
-    override Page.Title = defaultArg (prod.Name.get ctx.Locale) ""
+    override Page.Title = defaultArg (prod.Name.get locale) ""
     
+    member val Locale = locale
     member val Product = prod
     member val Category = cat
         
 
 
 
-type CategoryPage (ctx: PageContext, cat: Category) =
-    inherit Page(ctx, [cat, ctx.Locale])
+type CategoryPage (locale: Locale, cat: Category) =
+    inherit Page([cat, locale])
     
     override Page.Path = "category/" + cat.Key
-    override Page.Title = defaultArg (cat.Name.get ctx.Locale) ""
+    override Page.Title = defaultArg (cat.Name.get locale) ""
     
+    member val Locale = locale
     member val Category = cat
     
 
@@ -88,24 +89,14 @@ module Pages =
    
     let buildHomePage (m: Model) =        
         [for l in Locales.All ->
-                    let ctx = {
-                        Locale = l
-                        Model = m
-                    }
-         
-                    HomePage(ctx) :> Page]
+                    HomePage(l) :> Page]
 
 
     let buildCategoryPages (m: Model) =
         Locales.All
         |> List.collect (fun l ->  
-                            let ctx = {
-                                Locale = l
-                                Model = m
-                            }
-
                             [for (_, c) in (Map.toSeq m.Categories) ->
-                                CategoryPage(ctx, c) :> Page
+                                CategoryPage(l, c) :> Page
                                 ]
                             )
 
@@ -114,16 +105,11 @@ module Pages =
     let buildProductPages (m: Model) =
         Locales.All
         |> List.collect (fun l ->
-                            let ctx = {
-                                Locale = l
-                                Model = m
-                            }
-
                             m.Categories
                             |> Map.toSeq
                             |> Seq.collect (fun (_, c) ->
                                                 c.Products
-                                                |> Seq.map (fun p -> ProductPage(ctx, p, c) :> Page) )
+                                                |> Seq.map (fun p -> ProductPage(l, p, c) :> Page) )
                             |> Seq.toList )
 
 

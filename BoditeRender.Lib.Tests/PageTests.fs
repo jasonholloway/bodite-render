@@ -95,11 +95,10 @@ type ``buildPages`` () =
 
 
 
-
-
+        
 
 type TestPage (keys: obj seq) =
-    inherit Page({ Locale=Locales.LV; Model=Model() }, keys)
+    inherit Page(keys)
 
     override Page.Path = ""
     override Page.Title = "Hello"

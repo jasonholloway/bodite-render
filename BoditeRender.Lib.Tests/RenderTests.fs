@@ -35,11 +35,9 @@ let createCatAndProd () =
 
 
 type TestPage () =
-    inherit Page("Test")
+    inherit Page({ Model=Model(); Locale=Locales.LV }, "Test")
 
-    override Page.Model = Model()
     override Page.Path = ""
-    override Page.Locale = Locales.LV
     override Page.Title = "Hello"
 
 

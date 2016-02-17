@@ -22,33 +22,37 @@ type PageKey (v: obj) =
 
 
 
+type PageContext = {
+    Locale: Locale
+    Model: Model
+    //FindPage: obj seq -> Page
+}
+
+
 
 [<AbstractClass>]
-type Page (keys : Set<PageKey>) =
+type Page (ctx: PageContext, keys : Set<PageKey>) =
 
-    new(keys : obj seq) =
-        Page(keys 
-             |> Seq.map (fun k -> PageKey(k))
-             |> Set.ofSeq)
+    new(ctx, keys : obj seq) =
+        Page(ctx, keys 
+                  |> Seq.map (fun k -> PageKey(k))
+                  |> Set.ofSeq)
 
-    new(key : obj) =
-        Page([key])
+    new(ctx, key : obj) =
+        Page(ctx, [key])
         
+    member val Ctx = ctx
     member val Keys = keys
 
-    abstract member Model : Model
-    abstract member Locale : Locale
     abstract member Path : string
     abstract member Title : string
 
 
 
                                                     
-type HomePage (model, locale) =
-    inherit Page(["Index", locale])
+type HomePage (ctx: PageContext) =
+    inherit Page(ctx, ["Index", ctx.Locale])
 
-    override Page.Model = model
-    override Page.Locale = locale
     override Page.Path = ""
     override Page.Title = "Brigitas Bodite"
 
@@ -57,13 +61,11 @@ type HomePage (model, locale) =
 
 
 
-type ProductPage (model, prod: Product, cat: Category, locale) = 
-    inherit Page([cat, prod, locale])
+type ProductPage (ctx: PageContext, prod: Product, cat: Category) = 
+    inherit Page(ctx, [cat, prod, ctx.Locale])
     
-    override Page.Model = model
-    override Page.Locale = locale
     override Page.Path = "product/" + prod.Key
-    override Page.Title = defaultArg (prod.Name.get locale) ""
+    override Page.Title = defaultArg (prod.Name.get ctx.Locale) ""
     
     member val Product = prod
     member val Category = cat
@@ -71,13 +73,11 @@ type ProductPage (model, prod: Product, cat: Category, locale) =
 
 
 
-type CategoryPage (model, cat: Category, locale) =
-    inherit Page([cat, locale])
+type CategoryPage (ctx: PageContext, cat: Category) =
+    inherit Page(ctx, [cat, ctx.Locale])
     
-    override Page.Model = model
-    override Page.Locale = locale
     override Page.Path = "category/" + cat.Key
-    override Page.Title = defaultArg (cat.Name.get locale) ""
+    override Page.Title = defaultArg (cat.Name.get ctx.Locale) ""
     
     member val Category = cat
     
@@ -87,14 +87,25 @@ type CategoryPage (model, cat: Category, locale) =
 module Pages =
    
     let buildHomePage (m: Model) =        
-        [for l in Locales.All -> HomePage(m, l) :> Page]
+        [for l in Locales.All ->
+                    let ctx = {
+                        Locale = l
+                        Model = m
+                    }
+         
+                    HomePage(ctx) :> Page]
 
 
     let buildCategoryPages (m: Model) =
         Locales.All
         |> List.collect (fun l ->  
+                            let ctx = {
+                                Locale = l
+                                Model = m
+                            }
+
                             [for (_, c) in (Map.toSeq m.Categories) ->
-                                CategoryPage(m, c, l) :> Page
+                                CategoryPage(ctx, c) :> Page
                                 ]
                             )
 
@@ -103,11 +114,16 @@ module Pages =
     let buildProductPages (m: Model) =
         Locales.All
         |> List.collect (fun l ->
+                            let ctx = {
+                                Locale = l
+                                Model = m
+                            }
+
                             m.Categories
                             |> Map.toSeq
                             |> Seq.collect (fun (_, c) ->
                                                 c.Products
-                                                |> Seq.map (fun p -> ProductPage(m, p, c, l) :> Page) )
+                                                |> Seq.map (fun p -> ProductPage(ctx, p, c) :> Page) )
                             |> Seq.toList )
 
 

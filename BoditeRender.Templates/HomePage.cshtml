@@ -2,7 +2,7 @@
 @using BoditeRender
 @inherits HtmlTemplateBase<HomePage>
 @{
-    var rootCat = Model.Model.Categories.TryFind("root").Value;
+    var rootCat = Model.Ctx.Model.Categories.TryFind("root").Value;
 }
 
 <h2>HomePage: @Model.Title</h2>

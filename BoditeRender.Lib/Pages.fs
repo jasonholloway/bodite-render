@@ -19,15 +19,7 @@ type PageKey (v: obj) =
             x.Hash - other.Hash
 
 
-
-
-
-type PageContext (model: Model, locale: Locale) = 
-    member x.Model = model
-    member x.Locale = locale
-    member x.GetPath keys = ""
-
-
+            
 
 [<AbstractClass>]
 type Page (keys: Set<PageKey>) =
@@ -46,7 +38,7 @@ type Page (keys: Set<PageKey>) =
     abstract member Title : string
 
 
-
+        
                                                     
 type HomePage (locale: Locale) =
     inherit Page(["Index", locale])

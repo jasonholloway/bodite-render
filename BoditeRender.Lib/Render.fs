@@ -40,16 +40,37 @@ type LazyStream (fac : unit -> Stream) =
 
 
 
+
+type RenderContext (model: Model, getPage: obj seq -> Page) = 
+    member x.Model = model
+    member x.GetPage = getPage
+
+   
+
+type Template<'M when 'M :> Page> () as x =
+    inherit HtmlTemplateBase<'M>()
+
+    member x.Tit = x.Model.Title
+
+//    member val Ctx : RenderContext = (null :?> RenderContext) with get, set
+
+
+
+
 type Renderer (templateResolver: string -> string) =
 
     let templateMgr = DelegateTemplateManager(System.Func<_,_>(templateResolver)) :> ITemplateManager
     
+
     let renderService = 
-                TemplateServiceConfiguration(TemplateManager=templateMgr) 
+                FluentTemplateServiceConfiguration(fun x -> 
+                                                        x.ManageUsing(templateMgr)
+//                                                         .WithBaseTemplateType(typeof<Template>)                                                                                                                
+                                                        |> ignore)
                 |> RazorEngineService.Create
             
                 
-    member x.renderPage (p: Page) =    
+    member x.renderPage (ctx: RenderContext) (p: Page) =    
         let data = new LazyStream (fun _ ->
                                         let str = new MemoryStream()
                                         let writer = new StreamWriter(str)
@@ -64,8 +85,7 @@ type Renderer (templateResolver: string -> string) =
 
 
     
-    member x.renderPages (pages: seq<Page>) =
+    member x.renderPages (ctx: RenderContext) (pages: seq<Page>) =
         pages 
-        |> Seq.collect (fun p -> p |> x.renderPage) 
+        |> Seq.collect (fun p -> p |> x.renderPage ctx) 
         |> Seq.toList
-

@@ -1,11 +1,18 @@
 ﻿@using RazorEngine.Templating
 @using BoditeRender
-@inherits HtmlTemplateBase<HomePage>
+@using System.Linq
+@inherits Template<HomePage>
 @{
-    var rootCat = Model.Ctx.Model.Categories.TryFind("root").Value;
+    //var rootCat = Model.Ctx.Model.Categories.TryFind("root").Value;
+    var rootCat = new { Children = Enumerable.Range(0, 50).Select(i => new { Key = i.ToString() }) };
 }
 
 <h2>HomePage: @Model.Title</h2>
+
+
+
+<h4>@Tit</h4>
+
 
 <div>
     <h3>Categories</h3>

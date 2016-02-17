@@ -43,14 +43,18 @@ type TestPage () =
 
 
 
+
 [<TestFixture>]
 type ``renderPage`` () =
+
+    let ctx = RenderContext(Model(), (fun r -> TestPage() :> Page))
+
 
     [<Test>]
     member x.``returns VirtFile list`` () =
         let renderer = Renderer(fun s -> "hello!")
 
-        renderer.renderPage (TestPage())
+        renderer.renderPage ctx (TestPage())
         |> should be ofExactType<VirtFile list>
          
     
@@ -61,7 +65,7 @@ type ``renderPage`` () =
                                     | "TestPage.cshtml"    -> "hello!" 
                                     | _         -> failwith "Bad template key!")
                                     
-        let result = renderer.renderPage (TestPage())
+        let result = renderer.renderPage ctx (TestPage())
         
         result |> should be ofExactType<VirtFile list>
         result |> should haveLength 1

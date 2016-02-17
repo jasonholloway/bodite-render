@@ -13,9 +13,12 @@ let main argv =
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
-    |> Pages.buildPages
-    |> Renderer(resolver).renderPages
-    |> Seq.iter (fun f -> committer f)
+    |> (fun m ->
+            m
+            |> Pages.buildPages
+            |> Renderer(resolver).renderPages (RenderContext(m, (fun r -> HomePage(Locales.LV) :> Page)))
+            |> Seq.iter (fun f -> committer f)
+            ) 
         
     printfn "Rendered to %s" outputPath
 

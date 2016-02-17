@@ -1,14 +1,26 @@
 ﻿@using RazorEngine.Templating
 @using BoditeRender
 @inherits HtmlTemplateBase<HomePage>
+@{
+    var rootCat = Model.Model.Categories.TryFind("root").Value;
+}
 
 <h2>HomePage: @Model.Title</h2>
 
 <div>
     <h3>Categories</h3>
-    @foreach(var c in Model.Model.Categories) {
-        <div><a href="hello">@c.Key</a></div>
+
+    @foreach(var c in rootCat.Children) {
+
+        var e = 99;
+
+        //need to get page from page registry...
+
+
+
+        <a href="">@c.Key</a>
     }
+
 
 </div>
 

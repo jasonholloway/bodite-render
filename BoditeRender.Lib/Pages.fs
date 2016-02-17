@@ -2,14 +2,37 @@
 
 open System
 
+
+type PageKey (v: obj) =
+    member val Value = v
+    member val Hash = v.GetHashCode()
+
+    override x.Equals(o) =
+        x.Value.Equals(o)
+
+    override x.GetHashCode() =
+        x.Hash
+
+    interface IComparable with
+        member x.CompareTo(o) =
+            let other = (o :?> PageKey)
+            x.Hash - other.Hash
+
+
+
+
+
+
 [<AbstractClass>]
-type Page (keys : Set<IComparable>) =
+type Page (keys : Set<PageKey>) =
 
-    new(keys : IComparable seq) =
-        Page(Set(keys))
+    new(keys : obj seq) =
+        Page(keys 
+             |> Seq.map (fun k -> PageKey(k))
+             |> Set.ofSeq)
 
-    new(key) =
-        Page(Set([key]))
+    new(key : obj) =
+        Page([key])
         
     member val Keys = keys
 
@@ -26,7 +49,7 @@ type HomePage (model, locale) =
 
     override Page.Model = model
     override Page.Locale = locale
-    override Page.Path = "index"
+    override Page.Path = ""
     override Page.Title = "Brigitas Bodite"
 
     member val FeaturedProducts : List<Product> = List.empty
@@ -96,8 +119,11 @@ module Pages =
         ]
         |> List.concat
 
-        //now build pather from each page's associated model sack
-        //...
+
+    let buildPageRegistry (pages: Page seq) =
+        pages
+        |> Seq.map (fun p -> (p.Keys, p))
+        |> Map.ofSeq
 
 
         

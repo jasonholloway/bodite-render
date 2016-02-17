@@ -93,3 +93,46 @@ type ``buildPages`` () =
         |> Seq.length |> should equal Locales.All.Length
 
 
+
+
+
+
+
+type TestPage (keys: obj seq) =
+    inherit Page(keys)
+
+    override Page.Model = Model()
+    override Page.Path = ""
+    override Page.Locale = Locales.LV
+    override Page.Title = "Hello"
+
+
+
+[<TestFixture>]
+type ``buildPageRegistry`` () =
+        
+    [<Test>]
+    member x.``takes page list and returns map of sets * pages`` () =
+        [ for i in [0..10] -> TestPage([i]) :> Page]
+        |> Pages.buildPageRegistry 
+        |> should be ofExactType<Map<Set<PageKey>, Page>>
+
+
+    [<Test>]
+    member x.``returns correct page`` () =
+        let createKeys () : obj list = 
+            [
+                Locale(Guid.NewGuid().ToString())
+                Guid.NewGuid().ToString()
+            ]
+
+        let pages = [| for i in [0..100] -> TestPage(createKeys()) :> Page |]
+
+        let reg = pages
+                  |> Pages.buildPageRegistry
+
+        reg.TryFind(pages.[9].Keys).Value
+        |> should equal pages.[9]
+        
+        reg.TryFind(pages.[19].Keys).Value
+        |> should equal pages.[19]

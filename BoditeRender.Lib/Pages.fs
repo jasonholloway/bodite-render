@@ -13,6 +13,7 @@ type Page (keys : Set<IComparable>) =
         
     member val Keys = keys
 
+    abstract member Model : Model
     abstract member Locale : Locale
     abstract member Path : string
     abstract member Title : string
@@ -20,9 +21,10 @@ type Page (keys : Set<IComparable>) =
 
 
                                                     
-type HomePage (locale) =
+type HomePage (model, locale) =
     inherit Page(["Index", locale])
 
+    override Page.Model = model
     override Page.Locale = locale
     override Page.Path = "index"
     override Page.Title = "Brigitas Bodite"
@@ -32,9 +34,10 @@ type HomePage (locale) =
 
 
 
-type ProductPage (prod: Product, cat: Category, locale) = 
+type ProductPage (model, prod: Product, cat: Category, locale) = 
     inherit Page([cat, prod, locale])
     
+    override Page.Model = model
     override Page.Locale = locale
     override Page.Path = "product/" + prod.Key
     override Page.Title = defaultArg (prod.Name.get locale) ""
@@ -45,9 +48,10 @@ type ProductPage (prod: Product, cat: Category, locale) =
 
 
 
-type CategoryPage (cat: Category, locale) =
+type CategoryPage (model, cat: Category, locale) =
     inherit Page([cat, locale])
     
+    override Page.Model = model
     override Page.Locale = locale
     override Page.Path = "category/" + cat.Key
     override Page.Title = defaultArg (cat.Name.get locale) ""
@@ -60,14 +64,14 @@ type CategoryPage (cat: Category, locale) =
 module Pages =
    
     let buildHomePage (m: Model) =        
-        [for l in Locales.All -> (HomePage l) :> Page]
+        [for l in Locales.All -> HomePage(m, l) :> Page]
 
 
     let buildCategoryPages (m: Model) =
         Locales.All
         |> List.collect (fun l ->  
                             [for (_, c) in (Map.toSeq m.Categories) ->
-                                CategoryPage(c, l) :> Page
+                                CategoryPage(m, c, l) :> Page
                                 ]
                             )
 
@@ -80,7 +84,7 @@ module Pages =
                             |> Map.toSeq
                             |> Seq.collect (fun (_, c) ->
                                                 c.Products
-                                                |> Seq.map (fun p -> ProductPage(p, c, l) :> Page) )
+                                                |> Seq.map (fun p -> ProductPage(m, p, c, l) :> Page) )
                             |> Seq.toList )
 
 

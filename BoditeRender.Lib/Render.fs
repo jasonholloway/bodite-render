@@ -53,12 +53,12 @@ type Renderer (templateResolver: string -> string) =
         let data = new LazyStream (fun _ ->
                                         let str = new MemoryStream()
                                         let writer = new StreamWriter(str)
-                                        renderService.RunCompile(p.GetType().Name, writer, p.GetType(), p)
+                                        renderService.RunCompile(p.GetType().Name + ".cshtml", writer, p.GetType(), p)
                                         writer.Flush()
                                         str.Position <- 0L
                                         str :> Stream
                                         )
-
+                                        
         [new VirtFile(path=p.Path, data=data)]
 
 

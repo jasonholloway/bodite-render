@@ -37,6 +37,7 @@ let createCatAndProd () =
 type TestPage () =
     inherit Page("Test")
 
+    override Page.Model = Model()
     override Page.Path = ""
     override Page.Locale = Locales.LV
     override Page.Title = "Hello"
@@ -56,10 +57,10 @@ type ``renderPage`` () =
          
     
     [<Test>]
-    member x.``resolves template with typename of passed Page`` () =
+    member x.``resolves template with typename + 'cshtml' of passed Page`` () =
         let renderer = Renderer(fun k -> 
                                     match k with
-                                    | "TestPage"    -> "hello!" 
+                                    | "TestPage.cshtml"    -> "hello!" 
                                     | _         -> failwith "Bad template key!")
                                     
         let result = renderer.renderPage (TestPage())

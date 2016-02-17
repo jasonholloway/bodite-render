@@ -82,3 +82,20 @@ module RunLocal =
             
             File.ReadAllText(Path.Combine(folder.Path, vf.Path))
             |> should equal "blarg"
+
+
+        [<Test>]
+        member x.``concretizes hanging path to index doc in new named folder`` () =
+            FSCommitter.concretizePath "pomeranians/teddy-pom-pom"
+            |> should equal "pomeranians/teddy-pom-pom/index.html"
+
+        
+        [<Test>]
+        member x.``leaves fully specced paths alone`` () =
+            FSCommitter.concretizePath "pomeranians/teddy-pom-pom.html"
+            |> should equal "pomeranians/teddy-pom-pom.html"
+
+        [<Test>]
+        member x.``concretizes empty path`` () =
+            FSCommitter.concretizePath ""
+            |> should equal "index.html"

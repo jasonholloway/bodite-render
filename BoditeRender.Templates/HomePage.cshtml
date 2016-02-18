@@ -1,7 +1,7 @@
 ﻿@using RazorEngine.Templating
 @using BoditeRender
 @using System.Linq
-@inherits Template<HomePage>
+@inherits BoditeTemplate<HomePage>
 @{
     //var rootCat = Model.Ctx.Model.Categories.TryFind("root").Value;
     var rootCat = new { Children = Enumerable.Range(0, 50).Select(i => new { Key = i.ToString() }) };
@@ -11,17 +11,16 @@
 
 
 
-<h4>@Tit</h4>
+<h4>@( ((IBoditeTemplate)this).Context.Model.Categories.Count )</h4>
 
 
 <div>
     <h3>Categories</h3>
 
     @foreach(var c in rootCat.Children) {
-        
-        //need to get page from page registry...
-        
 
+        //need to get page from page registry...
+       
         <a href="">@c.Key</a>
     }
 

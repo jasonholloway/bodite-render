@@ -41,23 +41,33 @@ type LazyStream (fac : unit -> Stream) =
 
 
 
-type RenderContext (model: Model, getPage: obj seq -> Page) = 
+type RenderContext (model: Model, getPage: obj seq -> Page option) = 
     member x.Model = model
     member x.GetPage = getPage
 
    
 
-type Template<'M when 'M :> Page> () as x =
-    inherit HtmlTemplateBase<'M>()
-
-    member x.Tit = x.Model.Title
-
-//    member val Ctx : RenderContext = (null :?> RenderContext) with get, set
 
 
+type IBoditeTemplate =
+    abstract member Context : RenderContext with get, set
+    
+   
+type BoditeTemplate<'P when 'P :> Page> () as x =
+    inherit HtmlTemplateBase<'P>()
+
+    let mutable context = None
+
+    member x.Context = context
+    
+    interface IBoditeTemplate with
+        member x.Context with get() = context.Value 
+                          and set v = context <- Some v
 
 
-type Renderer (templateResolver: string -> string) =
+
+
+type Renderer (templateResolver: string -> string, ctx: RenderContext) =
 
     let templateMgr = DelegateTemplateManager(System.Func<_,_>(templateResolver)) :> ITemplateManager
     
@@ -65,12 +75,19 @@ type Renderer (templateResolver: string -> string) =
     let renderService = 
                 FluentTemplateServiceConfiguration(fun x -> 
                                                         x.ManageUsing(templateMgr)
-//                                                         .WithBaseTemplateType(typeof<Template>)                                                                                                                
+                                                         .ActivateUsing(fun c -> 
+                                                                            match c.Loader.CreateInstance c.TemplateType with
+                                                                            | :? IBoditeTemplate as t -> 
+                                                                                    t.Context <- ctx
+                                                                                    t :?> ITemplate
+                                                                            | t -> 
+                                                                                    t
+                                                                            )
                                                         |> ignore)
                 |> RazorEngineService.Create
             
                 
-    member x.renderPage (ctx: RenderContext) (p: Page) =    
+    member x.renderPage (p: Page) =    
         let data = new LazyStream (fun _ ->
                                         let str = new MemoryStream()
                                         let writer = new StreamWriter(str)
@@ -85,7 +102,7 @@ type Renderer (templateResolver: string -> string) =
 
 
     
-    member x.renderPages (ctx: RenderContext) (pages: seq<Page>) =
+    member x.renderPages (pages: seq<Page>) =
         pages 
-        |> Seq.collect (fun p -> p |> x.renderPage ctx) 
+        |> Seq.collect (fun p -> p |> x.renderPage) 
         |> Seq.toList

@@ -47,25 +47,27 @@ type TestPage () =
 [<TestFixture>]
 type ``renderPage`` () =
 
-    let ctx = RenderContext(Model(), (fun r -> TestPage() :> Page))
+    let ctx = RenderContext(Model(), (fun r -> None))
 
 
     [<Test>]
     member x.``returns VirtFile list`` () =
-        let renderer = Renderer(fun s -> "hello!")
+        let renderer = Renderer((fun s -> "hello!"), ctx)
 
-        renderer.renderPage ctx (TestPage())
+        renderer.renderPage (TestPage())
         |> should be ofExactType<VirtFile list>
          
     
     [<Test>]
     member x.``resolves template with typename + 'cshtml' of passed Page`` () =
-        let renderer = Renderer(fun k -> 
+        let renderer = Renderer((fun k -> 
                                     match k with
                                     | "TestPage.cshtml"    -> "hello!" 
-                                    | _         -> failwith "Bad template key!")
+                                    | _         -> failwith "Bad template key!"
+                                    ),
+                                    ctx)
                                     
-        let result = renderer.renderPage ctx (TestPage())
+        let result = renderer.renderPage (TestPage())
         
         result |> should be ofExactType<VirtFile list>
         result |> should haveLength 1

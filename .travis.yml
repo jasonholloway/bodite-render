@@ -10,4 +10,5 @@ install:
   - nuget restore
 script:
   - xbuild /p:Configuration=Release
-  - nunit-console ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll 
+  - nunit-console ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll
+ 

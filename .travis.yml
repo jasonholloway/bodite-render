@@ -1,14 +1,10 @@
 language: csharp
+mono:
+  - 3.12.0
 solution: bodite-render.sln
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y mono
-  - sudo apt-get install -y fsharp
-  - sudo apt-get install -y nuget
-  - sudo apt-get install -y nunit-console
 install:
-  - nuget restore
+  - nuget restore bodite-render.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release
-  - nunit-console ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll
- 
+  - xbuild /p:Configuration=Release bodite-render.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll 

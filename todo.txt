@@ -1,7 +1,29 @@
-TO DO:
+***********************************************
+BB-RENDER TODO ********************************
 
-> Gather all products into product specs
-	- fetch from couchdb
-	- filter to those with machinenames
-> Gather all categories into category specs
+Need to get basic renderer up and working.
+
+
+> PageRegistry
+	Test!!!
+
+	
+> House in AppDomain
+
+> Resolver to give template *file*, rather than just string - this allows debugging
+	but also need to support when we have no local file...
+	So, maybe a virtual file, with optional path?
+	
+	ITemplateManager resolves to ITemplateSource - to do!
+	
+	Get stuff working first.
+	
+	
+
+
+> Local renderer
+	- expose path-resolving service to template
+
+> Cloud renderer
+	- Heroku, custom FS stuff
 

@@ -15,8 +15,14 @@ let main argv =
     |> Hydrate.hydrateModel
     |> (fun m ->
             let pages = m |> Pages.buildPages
-            let ctx = RenderContext(m, (fun s -> None))
-            
+
+            let pageReg = pages |> Pages.buildPageRegistry
+
+            let ctx = RenderContext(m, (fun objs -> objs 
+                                                     |> Seq.map (fun o -> PageKey(o))
+                                                     |> Set.ofSeq
+                                                     |> pageReg.TryFind)
+                                                     )            
             pages
             |> Renderer(resolver, ctx).renderPages
             |> Seq.iter (fun f -> committer f)

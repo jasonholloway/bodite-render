@@ -1,0 +1,6 @@
+{
+  "name": "bodite-render",
+  "description": "Renderer of static bodite",
+  "image": "heroku/nodejs",
+  "addons": []
+}

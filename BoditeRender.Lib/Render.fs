@@ -58,10 +58,10 @@ type BoditeTemplate<'P when 'P :> Page> () as x =
 
     let mutable context = None
 
-    member x.Context = context
+    member x.Context with get() = context.Value
     
     interface IBoditeTemplate with
-        member x.Context with get() = context.Value 
+        member x.Context with get() = context.Value
                           and set v = context <- Some v
 
 
@@ -82,7 +82,7 @@ type Renderer (templateResolver: string -> string, ctx: RenderContext) =
                                                                                     t :?> ITemplate
                                                                             | t -> 
                                                                                     t
-                                                                            )
+                                                                            )                                                      
                                                         |> ignore)
                 |> RazorEngineService.Create
             

@@ -1,9 +1,9 @@
 sudo: false
 addons:
-  - apt:
-    - sources:
+  apt:
+    sources:
       - mono
-    - packages:
+    packages:
       - mono-complete
       - fsharp
       - nuget

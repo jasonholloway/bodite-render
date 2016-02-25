@@ -1,5 +1,6 @@
 sudo: required
 language: Javascript
+dist: trusty
 services:
   - docker
 install:

@@ -1,17 +1,13 @@
-sudo: false
-addons:
-  apt:
-    sources:
-      - mono
-    packages:
-      - mono-complete
-      - fsharp
-      - nuget
-      - nunit-console
-language:
-  - F#
+sudo: required
+language: fsharp
+before-install:
+  - sudo apt-get update -qq
+  - sudo apt-get install mono-complete
+  - sudo apt-get install fsharp
+  - sudo apt-get install nuget
+  - sudo apt-get install nunit-console
 install:
   - nuget restore bodite-render.sln
-script:
   - xbuild /p:Configuration=Release bodite-render.sln
+script:
   - nunit-console ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll 

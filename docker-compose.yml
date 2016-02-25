@@ -1,6 +1,0 @@
-worker:
-  build: .
-  command: 'bash -c ''mono render/bin/Release/render.exe'''
-  working_dir: /app/user
-#  environment:
-#shell: null

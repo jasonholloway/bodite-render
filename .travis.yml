@@ -2,8 +2,9 @@ sudo: false
 addons:
   - apt:
     - sources:
-    - packages:
       - mono
+    - packages:
+      - mono-complete
       - fsharp
       - nuget
       - nunit-console

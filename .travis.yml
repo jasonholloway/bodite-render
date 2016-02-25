@@ -2,10 +2,10 @@ sudo: required
 language: fsharp
 before-install:
   - sudo apt-get update -qq
-  - sudo apt-get install mono-complete
-  - sudo apt-get install fsharp
-  - sudo apt-get install nuget
-  - sudo apt-get install nunit-console
+  - sudo apt-get install -y mono-complete
+  - sudo apt-get install -y fsharp
+  - sudo apt-get install -y nuget
+  - sudo apt-get install -y nunit-console
 install:
   - nuget restore bodite-render.sln
   - xbuild /p:Configuration=Release bodite-render.sln

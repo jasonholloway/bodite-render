@@ -11,8 +11,6 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 		nodejs \
 		npm; \
 	apt-get clean; \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; 
-
-ADD . /bb
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
 
 CMD /bin/sh

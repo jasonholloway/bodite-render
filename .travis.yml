@@ -1,6 +1,4 @@
-sudo: required
-services:
-  - docker
+sudo: false
 addons:
   - apt:
     - sources:
@@ -9,6 +7,8 @@ addons:
       - fsharp
       - nuget
       - nunit-console
+language:
+  - F#
 install:
   - nuget restore bodite-render.sln
 script:

@@ -5,9 +5,10 @@ services:
   - docker
 install:
   - docker build -t bbr .
-  - docker create -it -v $(pwd):/bb/src:ro --name=bbr bbr
+  - docker create -it -v $(pwd):/bb-src:ro --name=bbr bbr
   - docker ps -a
   - docker start bbr
-  - docker exec bbr bash -c "echo 123456"
+  - docker exec bbr bash -c "mkdir /bb && cp -r /bb-src /bb"
 script:
-  - nunit-console ./BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll
+  - docker exec bbr bash -c "cd /bb && xbuild -Configuration=Release"
+  - docker exec bbr bash -c "nunit-console /bb/BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll"

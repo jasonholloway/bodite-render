@@ -5,7 +5,8 @@ services:
   - docker
 install:
   - docker build -t bbr .
-  - docker create -it -v $(pwd):/bb/src:ro bbr --name=bbr
+  - docker create -it -v $(pwd):/bb/src:ro --name=bbr bbr
+  - docker ps -a
   - docker start bbr
   - docker exec bbr bash -c "echo 123456"
 script:

@@ -7,7 +7,6 @@ install:
   - docker build -t bbr .
   - docker create -it --name=bbr bbr
   - docker ps -a
-  - docker start bbr
-  - docker exec bbr bash -c "cd /bb && xbuild /p:Configuration=Release"
 script:
+  - docker start bbr
   - docker exec bbr bash -c "nunit-console /bb/BoditeRender.Lib.Tests/bin/Release/BoditeRender.Lib.Tests.dll"

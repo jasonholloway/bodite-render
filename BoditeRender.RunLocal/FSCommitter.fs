@@ -14,7 +14,7 @@ let concretizePath virtPath =
 
 let create baseDirPath =
     fun (vf: VirtFile) ->
-        let blitter = Shared.getBlitter (Array.zeroCreate<byte>(4096))
+        let blitter = Blitter.create (Array.zeroCreate<byte>(4096))
         
         let path = Path.Combine (baseDirPath, (vf.Path |> concretizePath))
         let dirPath = Path.GetDirectoryName(path)

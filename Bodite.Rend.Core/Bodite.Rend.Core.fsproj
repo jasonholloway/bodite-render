@@ -5,14 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>dc97197e-e7fe-4f95-9d20-1bb92ad390ec</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>BoditeRender.RunLocal</RootNamespace>
-    <AssemblyName>BoditeRender.RunLocal</AssemblyName>
+    <ProjectGuid>432038c3-2044-45e1-afc9-4334bc5878e0</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bodite.Rend.Core</RootNamespace>
+    <AssemblyName>Bodite.Rend.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
-    <Name>BoditeRender.RunLocal</Name>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Name>Bodite.Rend.Core</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,10 +23,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\BoditeRender.RunLocal.XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
-    <StartArguments>C:\dev\bodite-render\BoditeRender.Templates C:\Users\Jason\Desktop\bodite</StartArguments>
+    <DocumentationFile>bin\Debug\Bodite.Rend.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,9 +32,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\BoditeRender.RunLocal.XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>bin\Release\Bodite.Rend.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -50,30 +45,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="FSResolver.fs" />
-    <Compile Include="FSCommitter.fs" />
-    <Compile Include="Program.fs" />
-    <None Include="App.config" />
+    <Compile Include="Product.fs" />
+    <Compile Include="Category.fs" />
+    <Compile Include="Model.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bodite.Rend.Core\Bodite.Rend.Core.fsproj">
-      <Name>Bodite.Rend.Core</Name>
-      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
-      <Name>Bodite.Rend.Data</Name>
-      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
       <Name>Bodite.Rend</Name>
       <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\BoditeRender.Lib\BoditeRender.Lib.fsproj">
-      <Name>BoditeRender.Lib</Name>
-      <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

@@ -34,12 +34,6 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Shared.fs" />
-    <Compile Include="Locale.fs" />
-    <Compile Include="DbModel.fs" />
-    <Compile Include="CouchDbLoader.fs" />
-    <Compile Include="Model.fs" />
-    <Compile Include="Hydrate.fs" />
     <Compile Include="Paths.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Render.fs" />
@@ -85,5 +79,22 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bodite.Rend.Core\Bodite.Rend.Core.fsproj">
+      <Name>Bodite.Rend.Core</Name>
+      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
+      <Name>Bodite.Rend.Data</Name>
+      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
+      <Name>Bodite.Rend</Name>
+      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

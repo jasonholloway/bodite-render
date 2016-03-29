@@ -77,19 +77,34 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\BoditeRender.Lib.Tests\BoditeRender.Lib.Tests.fsproj">
-      <Name>BoditeRender.Lib.Tests</Name>
+    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
+      <Name>Bodite.Rend.Data</Name>
+      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
+      <Name>Bodite.Rend.Model</Name>
+      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Pages\Bodite.Rend.Pages.fsproj">
+      <Name>Bodite.Rend.Pages</Name>
+      <Project>{9a41a347-932c-4134-8b61-3d568efe73f9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.RunLocal\Bodite.Rend.RunLocal.fsproj">
+      <Name>Bodite.Rend.RunLocal</Name>
+      <Project>{dc97197e-e7fe-4f95-9d20-1bb92ad390ec}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Tests\Bodite.Rend.Tests.fsproj">
+      <Name>Bodite.Rend.Tests</Name>
       <Project>{2916df0f-8d5e-4990-a8c8-2d2cbc879657}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\BoditeRender.Lib\BoditeRender.Lib.fsproj">
-      <Name>BoditeRender.Lib</Name>
-      <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\BoditeRender.RunLocal\BoditeRender.RunLocal.fsproj">
-      <Name>BoditeRender.RunLocal</Name>
-      <Project>{dc97197e-e7fe-4f95-9d20-1bb92ad390ec}</Project>
+    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
+      <Name>Bodite.Rend</Name>
+      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

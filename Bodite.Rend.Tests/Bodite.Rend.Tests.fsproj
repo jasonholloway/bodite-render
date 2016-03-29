@@ -6,10 +6,10 @@
     <ProjectGuid>{2916DF0F-8D5E-4990-A8C8-2D2CBC879657}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>render.test</RootNamespace>
-    <AssemblyName>BoditeRender.Lib.Tests</AssemblyName>
+    <AssemblyName>Bodite.Rend.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
-    <Name>BoditeRender.Lib.Tests</Name>
+    <Name>Bodite.Rend.Tests</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,24 +70,24 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bodite.Rend.Core\Bodite.Rend.Core.fsproj">
-      <Name>Bodite.Rend.Core</Name>
-      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
       <Name>Bodite.Rend.Data</Name>
       <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
+      <Name>Bodite.Rend.Model</Name>
+      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Pages\Bodite.Rend.Pages.fsproj">
+      <Name>Bodite.Rend.Pages</Name>
+      <Project>{9a41a347-932c-4134-8b61-3d568efe73f9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
       <Name>Bodite.Rend</Name>
       <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\BoditeRender.Lib\BoditeRender.Lib.fsproj">
-      <Name>BoditeRender.Lib</Name>
-      <Project>{251417b4-8151-4eec-a3f2-225d44a419a4}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

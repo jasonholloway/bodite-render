@@ -92,6 +92,6 @@ module Hydrate =
                    |> Seq.map (fun c -> (c.Key, c))
                    |> Map.ofSeq
 
-        Model(prods, cats)
+        BoditeModel(prods, cats)
 
 

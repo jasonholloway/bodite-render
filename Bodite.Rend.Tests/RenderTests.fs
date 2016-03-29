@@ -47,7 +47,7 @@ type TestPage () =
 [<TestFixture>]
 type ``renderPage`` () =
 
-    let ctx = RenderContext(Model(), (fun r -> None))
+    let ctx = RenderContext(BoditeModel(), (fun r -> None))
 
 
     [<Test>]

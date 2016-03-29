@@ -5,7 +5,6 @@ open NUnit.Framework
 open FsUnit
 
 open BoditeRender
-open BoditeRender.Pages
 
 
 
@@ -50,7 +49,7 @@ let cats =  catKeys
             |> Seq.map (fun c -> (c.Key, c))
             |> Map.ofSeq
 
-let model = new Model(products=prods, categories=cats);
+let model = new BoditeModel(products=prods, categories=cats);
 
 
 
@@ -87,7 +86,7 @@ type ``buildPages`` () =
 
     [<Test>]
     member x.``builds one HomePage per Locale`` () =
-        new Model()
+        new BoditeModel()
         |> Pages.buildPages
         |> Seq.filter ofType<HomePage>
         |> Seq.length |> should equal Locales.All.Length

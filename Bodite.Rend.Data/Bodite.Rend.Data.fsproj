@@ -58,11 +58,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bodite.Rend.Core\Bodite.Rend.Model.fsproj">
-      <Name>Bodite.Rend.Model</Name>
-      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <Reference Include="FifteenBelow.Json">
       <HintPath>..\packages\FifteenBelow.Json.0.2.0.12\lib\net40\FifteenBelow.Json.dll</HintPath>
       <Private>True</Private>
@@ -86,6 +81,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
+      <Name>Bodite.Rend.Model</Name>
+      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
       <Name>Bodite.Rend</Name>
       <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>

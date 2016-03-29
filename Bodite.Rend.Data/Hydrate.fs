@@ -78,7 +78,13 @@ module Hydrate =
 
 
 
-        
+    type HydratedModel (prods : Map<string, Product>, cats : Map<string, Category>) =
+        inherit BoditeModel ()
+
+        override x.Products = prods
+        override x.Categories = cats
+
+
 
 
     let hydrateModel (dbModel: DbModel) =
@@ -92,6 +98,6 @@ module Hydrate =
                    |> Seq.map (fun c -> (c.Key, c))
                    |> Map.ofSeq
 
-        BoditeModel(prods, cats)
+        HydratedModel(prods, cats) :> BoditeModel
 
 

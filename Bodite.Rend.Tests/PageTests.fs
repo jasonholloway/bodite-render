@@ -49,7 +49,7 @@ let cats =  catKeys
             |> Seq.map (fun c -> (c.Key, c))
             |> Map.ofSeq
 
-let model = new BoditeModel(products=prods, categories=cats);
+let model = new TestModel(products=prods, categories=cats);
 
 
 
@@ -86,7 +86,7 @@ type ``buildPages`` () =
 
     [<Test>]
     member x.``builds one HomePage per Locale`` () =
-        new BoditeModel()
+        new EmptyTestModel()
         |> Pages.buildPages
         |> Seq.filter ofType<HomePage>
         |> Seq.length |> should equal Locales.All.Length

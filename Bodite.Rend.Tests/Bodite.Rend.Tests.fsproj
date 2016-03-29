@@ -27,6 +27,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="TestModel.fs" />
     <Compile Include="Json.fs" />
     <Compile Include="CategoryTests.fs" />
     <Compile Include="PathTests.fs" />

@@ -58,8 +58,8 @@
     <Compile Include="Model.fs" />
     <Compile Include="Page.fs" />
     <Compile Include="TemplateLoader.fs" />
+    <Compile Include="FileCommitter.fs" />
     <Compile Include="Render.fs" />
-    <Compile Include="Committer.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

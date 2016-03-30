@@ -7,20 +7,6 @@ open RazorEngine.Templating
 
 
 
-type VirtFile (path, data: Stream) =
-    new (path, data: string) =
-        let str = new MemoryStream(Text.ASCIIEncoding.UTF8.GetBytes(data))
-        new VirtFile(path, str)
-
-    member val Path: string = path
-    member val Data: Stream = data
-
-    interface IDisposable with
-        member x.Dispose () =
-            x.Data.Dispose()
-
-
-
 type LazyStream (fac : unit -> Stream) =
     inherit Stream()
     

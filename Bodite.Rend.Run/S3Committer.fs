@@ -8,7 +8,7 @@ open Amazon.S3
 
 
 type S3Committer () =
-    inherit Committer ()
+    inherit FileCommitter ()
     
     let client = new AmazonS3Client()
     

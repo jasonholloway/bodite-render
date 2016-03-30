@@ -4,7 +4,7 @@ open System.IO
 
 
 type FSCommitter (baseDirPath : string) =
-    inherit Committer ()
+    inherit FileCommitter ()
     
     let concretizePath virtPath =
         match Path.HasExtension(virtPath) with

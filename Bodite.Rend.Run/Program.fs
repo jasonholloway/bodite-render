@@ -8,8 +8,8 @@ let main argv =
     let templatePath = argv.[0]
     let outputPath = argv.[1]
 
-    let loader = new FSLoader(templatePath)
-    let committer = new S3Committer()
+    let templateLoader = new FSLoader(templatePath)
+    let fileCommitter = new S3Committer()
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
@@ -24,8 +24,8 @@ let main argv =
                                                      |> pageReg.TryFind)
                                                      )            
             pages
-            |> Renderer(loader, ctx).renderPages
-            |> Seq.iter committer.Commit
+            |> Renderer(templateLoader, ctx).renderPages
+            |> Seq.iter fileCommitter.Commit
             ) 
         
     printfn "Rendered to %s" outputPath

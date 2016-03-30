@@ -2,7 +2,7 @@
 
 open System.IO
 open Amazon.S3
-
+open Amazon.S3.Model
 
 
 
@@ -10,10 +10,32 @@ open Amazon.S3
 type S3Committer () =
     inherit FileCommitter ()
     
-    let client = new AmazonS3Client()
-    
+    let client =     
+        let s3Config = new AmazonS3Config()
+        s3Config.ServiceURL <- "http://localhost:9988"
+        s3Config.UseHttp <- true
+        s3Config.ReadEntireResponse <- true
+        s3Config.ForcePathStyle <- true
+        
+        let creds = Amazon.Runtime.BasicAWSCredentials("", "")
+        
+        new AmazonS3Client(creds, s3Config)
+
+//
+//    let client = new AmazonS3Client()
+//    
 
     override x.Commit (vf : VirtFile) =
+
+        let req = new PutObjectRequest()
+        
+        req.BucketName <- "Bodite"
+        req.ContentType <- "text/html"
+        req.Key <- vf.Path // if vf.Path.Equals("") then "index" else vf.Path
+        req.ContentBody <- "blah blah blah"
+
+        let resp = client.PutObject(req)
+
         ()
 
 

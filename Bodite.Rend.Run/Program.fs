@@ -6,7 +6,7 @@ open System.Security.AccessControl
 [<EntryPoint>]
 let main argv =     
     let templatePath = argv.[0]
-    let outputPath = argv.[1]
+    //let outputPath = argv.[1]
 
     let templateLoader = new FSLoader(templatePath)
     let fileCommitter = new S3Committer()
@@ -28,6 +28,6 @@ let main argv =
             |> Seq.iter fileCommitter.Commit
             ) 
         
-    printfn "Rendered to %s" outputPath
+    printfn "Rendered to S3"
 
     0

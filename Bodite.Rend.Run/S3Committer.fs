@@ -31,7 +31,7 @@ type S3Committer () =
         
         req.BucketName <- "Bodite"
         req.ContentType <- "text/html"
-        req.Key <- vf.Path // if vf.Path.Equals("") then "index" else vf.Path
+        req.Key <- if vf.Path.Equals("") then "index.html" else vf.Path
         req.ContentBody <- "blah blah blah"
 
         let resp = client.PutObject(req)

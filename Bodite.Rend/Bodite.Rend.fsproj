@@ -57,9 +57,10 @@
     <Compile Include="LocaleString.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Page.fs" />
+    <Compile Include="TemplateLoader.fs" />
     <Compile Include="Render.fs" />
-    <Content Include="packages.config" />
     <Compile Include="Committer.fs" />
+    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

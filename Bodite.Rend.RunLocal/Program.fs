@@ -8,7 +8,7 @@ let main argv =
     let templatePath = argv.[0]
     let outputPath = argv.[1]
 
-    let resolver = FSResolver.create templatePath
+    let loader = new FSLoader(templatePath)
     let committer = new FSCommitter(outputPath)
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
@@ -24,7 +24,7 @@ let main argv =
                                                      |> pageReg.TryFind)
                                                      )            
             pages
-            |> Renderer(resolver, ctx).renderPages
+            |> Renderer(loader, ctx).renderPages
             |> Seq.iter committer.Commit
             ) 
         

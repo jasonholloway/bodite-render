@@ -67,9 +67,9 @@ type BoditeTemplate<'P when 'P :> Page> () as x =
 
 
 
-type Renderer (templateResolver: string -> string, ctx: RenderContext) =
+type Renderer (loader: TemplateLoader, ctx: RenderContext) =
 
-    let templateMgr = DelegateTemplateManager(System.Func<_,_>(templateResolver)) :> ITemplateManager
+    let templateMgr = DelegateTemplateManager(System.Func<_,_>(loader.Load)) :> ITemplateManager
     
 
     let renderService = 

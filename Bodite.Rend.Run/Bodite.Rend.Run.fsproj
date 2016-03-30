@@ -57,12 +57,17 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <None Include="App.config" />
-    <Compile Include="FSResolver.fs" />
+    <Compile Include="FSLoader.fs" />
     <Compile Include="S3Committer.fs" />
     <Compile Include="Program.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bodite.Rend.Pages\Bodite.Rend.Pages.fsproj">
+      <Name>Bodite.Rend.Pages</Name>
+      <Project>{9a41a347-932c-4134-8b61-3d568efe73f9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="AWSSDK.Core">
       <HintPath>..\packages\AWSSDK.Core.3.1.4.3\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>

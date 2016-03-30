@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="FSResolver.fs" />
+    <Compile Include="FSLoader.fs" />
     <Compile Include="FSCommitter.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />

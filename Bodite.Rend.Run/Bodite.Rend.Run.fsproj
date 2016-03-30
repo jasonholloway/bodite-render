@@ -38,39 +38,6 @@
     <DocumentationFile>bin\Release\BoditeRender.Run.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <None Include="App.config" />
-    <Compile Include="FSResolver.fs" />
-    <Compile Include="S3Committer.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
-      <Name>Bodite.Rend.Data</Name>
-      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
-      <Name>Bodite.Rend.Model</Name>
-      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
-      <Name>Bodite.Rend</Name>
-      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -87,6 +54,46 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <None Include="App.config" />
+    <Compile Include="FSResolver.fs" />
+    <Compile Include="S3Committer.fs" />
+    <Compile Include="Program.fs" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK.Core">
+      <HintPath>..\packages\AWSSDK.Core.3.1.4.3\lib\net35\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.S3">
+      <HintPath>..\packages\AWSSDK.S3.3.1.4.0\lib\net35\AWSSDK.S3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
+      <Name>Bodite.Rend.Data</Name>
+      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
+      <Name>Bodite.Rend.Model</Name>
+      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
+      <Name>Bodite.Rend</Name>
+      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

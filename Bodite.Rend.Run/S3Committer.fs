@@ -1,37 +1,44 @@
-﻿module S3Committer
+﻿namespace BoditeRender
 
 open System.IO
-open BoditeRender
 open Amazon.S3
 
 
 
-//committer should be a disposable type, subclassable also
 
 
+type S3Committer () =
+    inherit Committer ()
+    
+    let client = new AmazonS3Client()
+    
 
-let client = new AmazonS3Client()
-
-
-let concretizePath virtPath =
-    match Path.HasExtension(virtPath) with
-    | true  -> virtPath
-    | false -> (Path.Combine(virtPath, "index.html")).Replace('\\', '/')
-               
-
+    override x.Commit (vf : VirtFile) =
+        ()
 
 
-let create baseDirPath =
-    fun (vf: VirtFile) ->
-        let blitter = Blitter.create (Array.zeroCreate<byte>(4096))
+    override x.Dispose () =
+        client.Dispose()
+        
 
-        let path = Path.Combine (baseDirPath, (vf.Path |> concretizePath))
-        let dirPath = Path.GetDirectoryName(path)
-
-        if not <| Directory.Exists(dirPath) then
-           Directory.CreateDirectory(dirPath) |> ignore 
-
-        use sFile = File.Create(path)
-            
-        vf.Data
-        |> blitter sFile
+//
+//    let concretizePath virtPath =
+//        match Path.HasExtension(virtPath) with
+//        | true  -> virtPath
+//        | false -> (Path.Combine(virtPath, "index.html")).Replace('\\', '/')
+//               
+//               
+//    let create baseDirPath =
+//        fun (vf: VirtFile) ->
+//            let blitter = Blitter.create (Array.zeroCreate<byte>(4096))
+//
+//            let path = Path.Combine (baseDirPath, (vf.Path |> concretizePath))
+//            let dirPath = Path.GetDirectoryName(path)
+//
+//            if not <| Directory.Exists(dirPath) then
+//               Directory.CreateDirectory(dirPath) |> ignore 
+//
+//            use sFile = File.Create(path)
+//            
+//            vf.Data
+//            |> blitter sFile

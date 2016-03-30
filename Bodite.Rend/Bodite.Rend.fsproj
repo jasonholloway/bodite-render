@@ -59,6 +59,7 @@
     <Compile Include="Page.fs" />
     <Compile Include="Render.fs" />
     <Content Include="packages.config" />
+    <Compile Include="Committer.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

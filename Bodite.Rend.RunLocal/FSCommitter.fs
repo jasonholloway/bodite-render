@@ -6,7 +6,7 @@ open System.IO
 type FSCommitter (baseDirPath : string) =
     inherit FileCommitter ()
     
-    let concretizePath virtPath =
+    member x.ConcretizePath virtPath =
         match Path.HasExtension(virtPath) with
         | true  -> virtPath
         | false -> (Path.Combine(virtPath, "index.html")).Replace('\\', '/')
@@ -15,7 +15,7 @@ type FSCommitter (baseDirPath : string) =
     override x.Commit (vf: VirtFile) =    
         let blitter = Blitter.create (Array.zeroCreate<byte>(4096))
         
-        let path = Path.Combine (baseDirPath, (vf.Path |> concretizePath))
+        let path = Path.Combine (baseDirPath, (vf.Path |> x.ConcretizePath))
         let dirPath = Path.GetDirectoryName(path)
 
         if not <| Directory.Exists(dirPath) then

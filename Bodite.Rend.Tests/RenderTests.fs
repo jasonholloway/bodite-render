@@ -41,6 +41,18 @@ type TestPage () =
     override Page.Title = "Hello"
 
 
+type DummyLoader (s : string) =
+    inherit TemplateLoader()
+
+    override x.Load (path) = s
+    override x.Dispose () = ()
+    
+
+type FuncLoader (fn : string -> string) =
+    inherit TemplateLoader()
+
+    override x.Load (p) = p |> fn
+    override x.Dispose () = ()
 
 
 
@@ -52,7 +64,7 @@ type ``renderPage`` () =
 
     [<Test>]
     member x.``returns VirtFile list`` () =
-        let renderer = Renderer((fun s -> "hello!"), ctx)
+        let renderer = Renderer(new DummyLoader("hello!"), ctx)
 
         renderer.renderPage (TestPage())
         |> should be ofExactType<VirtFile list>
@@ -60,11 +72,11 @@ type ``renderPage`` () =
     
     [<Test>]
     member x.``resolves template with typename + 'cshtml' of passed Page`` () =
-        let renderer = Renderer((fun k -> 
-                                    match k with
-                                    | "TestPage.cshtml"    -> "hello!" 
-                                    | _         -> failwith "Bad template key!"
-                                    ),
+        let renderer = Renderer(new FuncLoader(fun k -> 
+                                                match k with
+                                                | "TestPage.cshtml"    -> "hello!" 
+                                                | _         -> failwith "Bad template key!"
+                                                ),
                                     ctx)
                                     
         let result = renderer.renderPage (TestPage())

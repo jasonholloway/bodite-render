@@ -9,15 +9,16 @@ module RunLocal =
 
 
     [<TestFixture>]
-    type ``getFSResolver`` () =
+    type ``getFSLoader`` () =
     
         [<Test>]
         member x.``resolves file from immediate directory`` () =
             use file = new Helpers.TempFile("file.cshtml", "templatecontents")
         
-            let resolver = FSResolver.create file.DirPath
+            let loader = new FSLoader(file.DirPath)
 
-            resolver "file.cshtml"
+            "file.cshtml"
+            |> loader.Load 
             |> should equal "templatecontents"
 
 
@@ -30,12 +31,11 @@ module RunLocal =
         member x.``commits to immediate directory`` () =
             use folder = new Helpers.TempFolder()
 
-            let committer = FSCommitter.create folder.Path
+            let committer = new FSCommitter(folder.Path)
                     
             use vf = new VirtFile("file.html", "blarg")
                        
-            committer vf 
-            |> ignore
+            vf |> committer.Commit
 
             File.ReadAllText(Path.Combine(folder.Path, vf.Path))
             |> should equal "blarg"
@@ -44,15 +44,11 @@ module RunLocal =
         [<Test>]
         member x.``creates intermediate folders if not existent, then commits`` () =
             use folder = new Helpers.TempFolder()
-
-            let committer = FSCommitter.create folder.Path
-                    
+            use committer = new FSCommitter(folder.Path)                    
             use vf = new VirtFile("blarg/oof/file.html", "blarg")
                        
-            committer vf 
-            |> ignore
-
-
+            vf |> committer.Commit
+            
             Directory.Exists(Path.Combine(folder.Path, "blarg"))
             |> should equal true
             
@@ -66,16 +62,14 @@ module RunLocal =
         [<Test>]
         member x.``commits into intermediate folders if existent`` () =
             use folder = new Helpers.TempFolder()
-
-            let committer = FSCommitter.create folder.Path
+            use committer = new FSCommitter(folder.Path)
             
             Directory.CreateDirectory(Path.Combine(folder.Path, "krunk"))
             |> ignore
             
             use vf = new VirtFile("krunk/file.html", "blarg")
                        
-            committer vf 
-            |> ignore
+            vf |> committer.Commit
             
             Directory.Exists(Path.Combine(folder.Path, "krunk"))
             |> should equal true
@@ -86,16 +80,25 @@ module RunLocal =
 
         [<Test>]
         member x.``concretizes hanging path to index doc in new named folder`` () =
-            FSCommitter.concretizePath "pomeranians/teddy-pom-pom"
+            use committer = new FSCommitter("")
+            
+            "pomeranians/teddy-pom-pom"
+            |> committer.ConcretizePath
             |> should equal "pomeranians/teddy-pom-pom/index.html"
 
         
         [<Test>]
         member x.``leaves fully specced paths alone`` () =
-            FSCommitter.concretizePath "pomeranians/teddy-pom-pom.html"
+            use committer = new FSCommitter("")
+            
+            "pomeranians/teddy-pom-pom.html"
+            |> committer.ConcretizePath
             |> should equal "pomeranians/teddy-pom-pom.html"
 
         [<Test>]
         member x.``concretizes empty path`` () =
-            FSCommitter.concretizePath ""
+            use committer = new FSCommitter("")
+
+            ""
+            |> committer.ConcretizePath
             |> should equal "index.html"

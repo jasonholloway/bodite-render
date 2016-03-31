@@ -24,36 +24,33 @@ type LazyStream (fac : unit -> Stream) =
     override x.Read (buffer, offset, count) = lzStr.Value.Read(buffer, offset, count)
     override x.Write (buffer, offset, count) = raise (System.NotSupportedException())
 
-
-
-
-type RenderContext (model: Model, getPage: obj seq -> Page option) = 
+   
+        
+type RenderContext<'M when 'M :> Model> (model: 'M, getPage: obj seq -> Page option) = 
     member x.Model = model
     member x.GetPage = getPage
 
    
 
-
-
-type IBoditeTemplate =
-    abstract member Context : RenderContext with get, set
+type IBoditeTemplate<'M when 'M :> Model> =
+    abstract member Context : RenderContext<'M> with get, set
     
    
-type BoditeTemplate<'P when 'P :> Page> () as x =
+type BoditeTemplate<'M,'P when 'M :> Model and 'P :> Page> () as x =
     inherit HtmlTemplateBase<'P>()
 
     let mutable context = None
 
     member x.Context with get() = context.Value
     
-    interface IBoditeTemplate with
+    interface IBoditeTemplate<'M> with
         member x.Context with get() = context.Value
                           and set v = context <- Some v
 
 
 
 
-type Renderer (loader: TemplateLoader, ctx: RenderContext) =
+type Renderer<'M when 'M :> Model> (loader: TemplateLoader, ctx: RenderContext<'M>) =
 
     let templateMgr = DelegateTemplateManager(System.Func<_,_>(loader.Load)) :> ITemplateManager
     
@@ -63,7 +60,7 @@ type Renderer (loader: TemplateLoader, ctx: RenderContext) =
                                                         x.ManageUsing(templateMgr)
                                                          .ActivateUsing(fun c -> 
                                                                             match c.Loader.CreateInstance c.TemplateType with
-                                                                            | :? IBoditeTemplate as t -> 
+                                                                            | :? IBoditeTemplate<'M> as t -> 
                                                                                     t.Context <- ctx
                                                                                     t :?> ITemplate
                                                                             | t -> 

@@ -21,9 +21,21 @@ type S3Committer () =
         
         new AmazonS3Client(creds, s3Config)
 
-//
-//    let client = new AmazonS3Client()
-//    
+
+    //-----------------------------------------------------------------------
+    //file of filepath/hashes should be readable here (or maybe above)
+    //only files with different hashes should be committed
+    //newly orphaned files should be cleaned away
+    //-----------------------------------------------------------------------
+     
+
+    //-----------------------------------------------------------------------
+    //makes me think that design should be such that bare minimum of design is actually
+    //on html page, which should mainly be semantic data.
+    //hive off to changable css and js files. Thereby few changes should propogate to html.
+    //-----------------------------------------------------------------------
+
+
 
     override x.Commit (vf : VirtFile) =
 
@@ -32,7 +44,10 @@ type S3Committer () =
         req.BucketName <- "Bodite"
         req.ContentType <- "text/html"
         req.Key <- if vf.Path.Equals("") then "index.html" else vf.Path
-        req.ContentBody <- "blah blah blah"
+        
+        req.InputStream <- vf.Data
+
+        //req.ContentBody <- "blah blah blah"
 
         let resp = client.PutObject(req)
 
@@ -40,7 +55,8 @@ type S3Committer () =
 
 
     override x.Dispose () =
-        client.Dispose()
+        //client.Dispose()
+        ()
         
 
 //

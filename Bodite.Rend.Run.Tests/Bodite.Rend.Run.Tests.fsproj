@@ -5,14 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>15861094-d277-4c90-af9b-b31e21a33d25</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>BoditeRender.Run</RootNamespace>
-    <AssemblyName>Bodite.Rend.Run</AssemblyName>
+    <ProjectGuid>39e799b8-6528-499d-878c-90640519e643</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bodite.Rend.Run.Tests</RootNamespace>
+    <AssemblyName>Bodite.Rend.Run.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
-    <Name>Bodite.Rend.Run</Name>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Name>Bodite.Rend.Run.Tests</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,10 +23,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\BoditeRender.Run.XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
-    <StartArguments>C:\dev\bodite-render\Bodite.Rend.Templates</StartArguments>
+    <DocumentationFile>bin\Debug\Bodite.Rend.Run.Tests.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,9 +32,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\BoditeRender.Run.XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>bin\Release\Bodite.Rend.Run.Tests.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -57,20 +52,10 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <None Include="App.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Compile Include="FSLoader.fs" />
-    <Compile Include="S3Committer.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="S3Tests.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bodite.Rend.Pages\Bodite.Rend.Pages.fsproj">
-      <Name>Bodite.Rend.Pages</Name>
-      <Project>{9a41a347-932c-4134-8b61-3d568efe73f9}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <Reference Include="AWSSDK.Core">
       <HintPath>..\packages\AWSSDK.Core.3.2.3.0-beta\lib\net35\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
@@ -83,24 +68,13 @@
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\Bodite.Rend.Data\Bodite.Rend.Data.fsproj">
-      <Name>Bodite.Rend.Data</Name>
-      <Project>{a09f4cc8-6051-4167-b7c9-3d9f8353fd96}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Bodite.Rend.Model\Bodite.Rend.Model.fsproj">
-      <Name>Bodite.Rend.Model</Name>
-      <Project>{432038c3-2044-45e1-afc9-4334bc5878e0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
-      <Name>Bodite.Rend</Name>
-      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

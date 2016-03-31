@@ -1,7 +1,7 @@
 ﻿@using RazorEngine.Templating
 @using BoditeRender
 @using System.Linq
-@inherits BoditeTemplate<HomePage>
+@inherits BoditeTemplate<BoditeModel, HomePage>
 @{
     var rootCat = Context.Model.Categories.TryFind("root").Value;
     
@@ -11,7 +11,7 @@
 
 
 
-<h4>@( ((IBoditeTemplate)this).Context.Model.Categories.Count )</h4>
+<h4>@( ((IBoditeTemplate<BoditeModel>)this).Context.Model.Categories.Count )</h4>
 
 
 <div>

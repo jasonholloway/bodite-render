@@ -5,6 +5,8 @@ open System.Diagnostics
 open System.Net
 open Amazon.S3
 open BoditeRender
+open System.Threading
+open System.IO
 
 [<TestFixture>]
 type S3Tests() = 
@@ -27,8 +29,13 @@ type S3Tests() =
 
 
 
-
-
+    let rec compareStreams (s1 : Stream, s2 : Stream) =
+        if not(s1.CanRead.Equals(s2.CanRead)) then false
+        else if not(s1.CanRead) then true
+        else if not(s1.ReadByte().Equals(s2.ReadByte())) then false
+        else compareStreams(s1, s2) 
+        
+                
 
     [<SetUp>]
     member x.SetUp () =    
@@ -39,6 +46,9 @@ type S3Tests() =
         p.StartInfo <- info
         p.Start()
         |> ignore
+
+        Thread.Sleep(500) //to allow fakes3 to open - could also poll here
+
 
 
     [<TearDown>]
@@ -79,13 +89,10 @@ type S3Tests() =
         virtFiles
         |> Seq.map (fun vf ->
                         let res = client.GetObject("bb", vf.Path)
-
-                        Assert.That(res.HttpStatusCode, Is.EqualTo(HttpStatusCode.OK))
-
                         use str = res.ResponseStream
-
-                        //read stream as string and compare to vf...
-
+                        
+                        Assert.That(res.HttpStatusCode, Is.EqualTo(HttpStatusCode.OK))
+                        Assert.That(compareStreams(vf.Data, str))
                         ()
                         )
         |> ignore

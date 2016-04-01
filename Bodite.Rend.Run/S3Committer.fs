@@ -7,20 +7,9 @@ open Amazon.S3.Model
 
 
 
-type S3Committer () =
+type S3Committer (client : Amazon.S3.AmazonS3Client, bucketName : string) =
     inherit FileCommitter ()
     
-    let client =     
-        let s3Config = new AmazonS3Config()
-        s3Config.ServiceURL <- "http://localhost:9988"
-        s3Config.UseHttp <- true
-        s3Config.ReadEntireResponse <- true
-        s3Config.ForcePathStyle <- true
-        
-        let creds = Amazon.Runtime.BasicAWSCredentials("", "")
-        
-        new AmazonS3Client(creds, s3Config)
-
 
     //-----------------------------------------------------------------------
     //file of filepath/hashes should be readable here (or maybe above)
@@ -41,7 +30,7 @@ type S3Committer () =
 
         let req = new PutObjectRequest()
         
-        req.BucketName <- "Bodite"
+        req.BucketName <- bucketName
         req.ContentType <- "text/html"
         req.Key <- if vf.Path.Equals("") then "index.html" else vf.Path
         

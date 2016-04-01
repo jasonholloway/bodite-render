@@ -76,6 +76,18 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bodite.Rend.Run\Bodite.Rend.Run.fsproj">
+      <Name>Bodite.Rend.Run</Name>
+      <Project>{15861094-d277-4c90-af9b-b31e21a33d25}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Bodite.Rend\Bodite.Rend.fsproj">
+      <Name>Bodite.Rend</Name>
+      <Project>{6706009d-fbe3-4d31-9559-3e460e53b9f8}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>render.test</RootNamespace>
     <AssemblyName>Bodite.Rend.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <Name>Bodite.Rend.Tests</Name>
   </PropertyGroup>
@@ -42,7 +42,7 @@
     <Compile Include="HydrateTests.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="FSharp.Core, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Data">

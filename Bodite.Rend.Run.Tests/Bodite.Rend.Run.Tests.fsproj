@@ -9,8 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Bodite.Rend.Run.Tests</RootNamespace>
     <AssemblyName>Bodite.Rend.Run.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>Bodite.Rend.Run.Tests</Name>
     <TargetFrameworkProfile />
@@ -54,6 +54,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="S3Tests.fs" />
     <Content Include="packages.config" />
+    <Content Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.Core">
@@ -64,10 +65,15 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net35\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.3.1.2.1\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HttpFs">
+      <HintPath>..\packages\Http.fs-prerelease.2.4.1\lib\net40\HttpFs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>

@@ -5,13 +5,26 @@ open System.Diagnostics
 open System.Net
 open Amazon.S3
 open BoditeRender
+open System
 open System.Threading
 open System.IO
+open FSharp.Data
+open HttpFs
+open HttpFs.Client
+
 
 [<TestFixture>]
 type S3Tests() = 
 
-    let port = 9583
+    let port = 787
+    let bucketName = Guid.NewGuid().ToString()
+        
+    let bucketUri =    
+        let uriBuilder = UriBuilder("http", "localhost", port)
+        uriBuilder.Path <- bucketName
+        uriBuilder.Uri
+        
+
     let p = new Process()
 
 
@@ -35,27 +48,36 @@ type S3Tests() =
         else if not(s1.ReadByte().Equals(s2.ReadByte())) then false
         else compareStreams(s1, s2) 
         
-                
+            
+    
+    let ensureBucketExists (client : AmazonS3Client) (bucketName : string) =
+        async {
+            use! res = createRequest Get bucketUri |> getResponse
+            if res.StatusCode.Equals(404) then                
+                client.PutBucket(bucketName) |> ignore                        
+        }
+        |> Async.RunSynchronously
+
+
 
     [<SetUp>]
-    member x.SetUp () =    
-        let info = new ProcessStartInfo("fakes3")        
-        info.Arguments <- "-p " + port.ToString() + " -r .fakes3-root"
-        info.UseShellExecute <- true
-        
-        p.StartInfo <- info
-        p.Start()
-        |> ignore
-
-        Thread.Sleep(500) //to allow fakes3 to open - could also poll here
-
+    member x.SetUp () =    ()
+//        let info = new ProcessStartInfo("fakes3")        
+//        info.Arguments <- "-p " + port.ToString() + " -r .fakes3-root"
+//        info.UseShellExecute <- true
+//        
+//        p.StartInfo <- info
+//        p.Start()
+//        |> ignore
+//
+//        Thread.Sleep(500) //to allow fakes3 to open - could also poll here
 
 
     [<TearDown>]
-    member x.TearDown () =
-        p.CloseMainWindow() |> ignore
-        p.Kill()
-        p.Dispose()
+    member x.TearDown () = ()
+//        p.CloseMainWindow() |> ignore
+//        p.Kill()
+//        p.Dispose()
         //remove root folder here!
         //...
 
@@ -73,28 +95,41 @@ type S3Tests() =
         ()
 
 
+
     [<Test>]
     member x.``each virtFile committed to correct location`` () =
         use client = getS3Client()
-        use committer = new S3Committer(client, "bb")
 
+        ensureBucketExists client bucketName
+
+        use committer = new S3Committer(client, bucketName)
+        
         let virtFiles =
-            [1..10]
-            |> List.map (fun i -> new VirtFile("blah" + i.ToString(), "abcdefghijklmnopqrstuvwxyz"))       
+            [
+                ("blah", "awdpojpojdwdwd");
+                ("blah/blah", "asfafsfsafaff");
+                ("blah/blah/blah.blah", "oiuyyewqebbbb");
+                ("", "ihoihoh");
+            ]
+            |> List.map (fun (p, d) -> new VirtFile(p, d))
             
         virtFiles
-        |> Seq.map (fun vf -> vf |> committer.Commit)
-        |> ignore
-        
+        |> Seq.iter committer.Commit
+                
+
         virtFiles
         |> Seq.map (fun vf ->
-                        let res = client.GetObject("bb", vf.Path)
-                        use str = res.ResponseStream
-                        
-                        Assert.That(res.HttpStatusCode, Is.EqualTo(HttpStatusCode.OK))
-                        Assert.That(compareStreams(vf.Data, str))
-                        ()
-                        )
+                        async {
+                            let uri = Uri(bucketUri, vf.Path)
+                            
+                            use! resp = createRequest Get uri
+                                        |> getResponse
+
+                            Assert.That(resp.StatusCode, Is.EqualTo(200))
+                            Assert.That(compareStreams(vf.Data, resp.Body))
+                        })
+        |> Async.Parallel
+        |> Async.RunSynchronously
         |> ignore
 
         

@@ -9,8 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Bodite.Rend.Data</RootNamespace>
     <AssemblyName>Bodite.Rend.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>Bodite.Rend.Data</Name>
     <TargetFrameworkProfile />

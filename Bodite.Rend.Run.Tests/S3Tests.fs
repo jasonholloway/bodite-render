@@ -8,30 +8,56 @@ open BoditeRender
 open System
 open System.Threading
 open System.IO
+open System.Text
 open FSharp.Data
 open HttpFs
 open HttpFs.Client
+open Flurl
+
+
+module Settings =
+    let Port = 787
+    let BucketName = Guid.NewGuid().ToString()
+    let BaseUri = UriBuilder("http", "localhost", Port).Uri 
+
+
+
+
+
+[<SetUpFixture>]
+type S3TestSetup() =
+
+    let p = new Process()
+
+    [<SetUp>]
+    member x.SetUp () =
+        let info = new ProcessStartInfo("s3rver")
+        info.Arguments <- "-p " + Settings.Port.ToString() + " -d .s3rver -i index.html"
+        info.UseShellExecute <- true
+        
+        p.StartInfo <- info
+        p.Start()
+        |> ignore
+
+        Thread.Sleep(100) //to allow s3rver to open - could also poll here
+
+    [<TearDown>]
+    member x.TearDown () =
+        p.CloseMainWindow() |> ignore
+        p.Kill()
+        p.Dispose()
+        //remove root folder here!
+        //...
+      
+
 
 
 [<TestFixture>]
 type S3Tests() = 
-
-    let port = 787
-    let bucketName = Guid.NewGuid().ToString()
         
-    let bucketUri =    
-        let uriBuilder = UriBuilder("http", "localhost", port)
-        uriBuilder.Path <- bucketName
-        uriBuilder.Uri
-        
-
-    let p = new Process()
-
-
-    
     let getS3Client () =
         let s3Config = new AmazonS3Config()
-        s3Config.ServiceURL <- "http://localhost:" + port.ToString()
+        s3Config.ServiceURL <- Settings.BaseUri.ToString()
         s3Config.UseHttp <- true
         s3Config.ReadEntireResponse <- true
         s3Config.ForcePathStyle <- true
@@ -49,10 +75,16 @@ type S3Tests() =
         else compareStreams(s1, s2) 
         
             
+    let stream2String (s : Stream) =
+        use reader = new StreamReader(s)
+        reader.ReadToEnd()
+
     
     let ensureBucketExists (client : AmazonS3Client) (bucketName : string) =
         async {
+            let bucketUri = Uri(Settings.BaseUri, bucketName)
             use! res = createRequest Get bucketUri |> getResponse
+
             if res.StatusCode.Equals(404) then                
                 client.PutBucket(bucketName) |> ignore                        
         }
@@ -60,31 +92,10 @@ type S3Tests() =
 
 
 
-    [<SetUp>]
-    member x.SetUp () =    ()
-//        let info = new ProcessStartInfo("fakes3")        
-//        info.Arguments <- "-p " + port.ToString() + " -r .fakes3-root"
-//        info.UseShellExecute <- true
-//        
-//        p.StartInfo <- info
-//        p.Start()
-//        |> ignore
-//
-//        Thread.Sleep(500) //to allow fakes3 to open - could also poll here
-
-
-    [<TearDown>]
-    member x.TearDown () = ()
-//        p.CloseMainWindow() |> ignore
-//        p.Kill()
-//        p.Dispose()
-        //remove root folder here!
-        //...
-
         
 
     [<Test>]
-    member x.``fakes3 is available to test`` () =               
+    member x.``s3rver is available to test`` () =               
         use client = getS3Client()
 
         let res = client.ListBuckets()
@@ -100,33 +111,32 @@ type S3Tests() =
     member x.``each virtFile committed to correct location`` () =
         use client = getS3Client()
 
-        ensureBucketExists client bucketName
+        ensureBucketExists client Settings.BucketName
 
-        use committer = new S3Committer(client, bucketName)
+        use committer = new S3Committer(client, Settings.BucketName)
         
-        let virtFiles =
+        let files =
             [
                 ("blah", "awdpojpojdwdwd");
                 ("blah/blah", "asfafsfsafaff");
                 ("blah/blah/blah.blah", "oiuyyewqebbbb");
                 ("", "ihoihoh");
             ]
-            |> List.map (fun (p, d) -> new VirtFile(p, d))
             
-        virtFiles
+        files
+        |> Seq.map (fun (p, d) -> new VirtFile(p, d))
         |> Seq.iter committer.Commit
-                
-
-        virtFiles
-        |> Seq.map (fun vf ->
+            
+        files
+        |> Seq.map (fun (path, contents) ->
                         async {
-                            let uri = Uri(bucketUri, vf.Path)
+                            let uri = Uri(Settings.BaseUri, Url.Combine(Settings.BucketName, path))
                             
                             use! resp = createRequest Get uri
                                         |> getResponse
 
                             Assert.That(resp.StatusCode, Is.EqualTo(200))
-                            Assert.That(compareStreams(vf.Data, resp.Body))
+                            Assert.That(resp.Body |> stream2String, Is.EqualTo(contents))
                         })
         |> Async.Parallel
         |> Async.RunSynchronously

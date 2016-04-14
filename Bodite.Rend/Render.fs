@@ -71,15 +71,19 @@ type Renderer<'M when 'M :> Model> (loader: TemplateLoader, ctx: RenderContext<'
             
                 
     member x.renderPage (p: Page) =    
-        let data = new LazyStream (fun _ ->
-                                        let str = new MemoryStream()
-                                        let writer = new StreamWriter(str)
-                                        renderService.RunCompile(p.GetType().Name + ".cshtml", writer, p.GetType(), p)
-                                        writer.Flush()
-                                        str.Position <- 0L
-                                        str :> Stream
-                                        )
-                                        
+        use str = new MemoryStream()
+        use writer = new StreamWriter(str)
+
+        renderService.RunCompile(
+                        p.GetType().Name + ".cshtml",
+                        writer,
+                        p.GetType(),
+                        p)
+
+        writer.Flush()
+
+        let data = str.ToArray()
+                                
         [new VirtFile(path=p.Path, data=data)]
 
 

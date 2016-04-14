@@ -124,7 +124,7 @@ type S3Tests() =
             ]
             
         files
-        |> Seq.map (fun (p, d) -> new VirtFile(p, d))
+        |> Seq.map (fun (path, data) -> new VirtFile(path, data))
         |> Seq.iter committer.Commit
             
         files
@@ -142,5 +142,7 @@ type S3Tests() =
         |> Async.RunSynchronously
         |> ignore
 
-        
 
+
+
+    //what should be here is test of pre-existing file hash provider...

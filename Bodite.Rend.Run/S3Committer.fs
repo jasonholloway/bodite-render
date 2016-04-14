@@ -34,9 +34,9 @@ type S3Committer (client : Amazon.S3.AmazonS3Client, bucketName : string) =
         req.ContentType <- "text/html"
         req.Key <- if vf.Path.Equals("") then "index.html" else vf.Path
         
-        req.InputStream <- vf.Data
+        use str = new MemoryStream(vf.Data)
 
-        //req.ContentBody <- "blah blah blah"
+        req.InputStream <- str
 
         let resp = client.PutObject(req)
 

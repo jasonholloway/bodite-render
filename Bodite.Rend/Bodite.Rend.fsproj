@@ -61,6 +61,7 @@
     <Compile Include="FileCommitter.fs" />
     <Compile Include="Render.fs" />
     <Content Include="packages.config" />
+    <Compile Include="Debouncer.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -85,7 +85,7 @@ type ``renderPage`` () =
         result |> should haveLength 1
 
         result.Head.Data
-        |> Helpers.stream2String
+        |> Helpers.data2String
         |> should equal "hello!"
 
 

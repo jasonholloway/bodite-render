@@ -38,6 +38,9 @@ let stream2String (str: Stream) =
     use r = new StreamReader(str)
     r.ReadToEnd()
 
+let data2String (data : byte[]) =
+    Text.ASCIIEncoding.UTF8.GetString(data)
+
 
 
 let rec flatten getChildren node =

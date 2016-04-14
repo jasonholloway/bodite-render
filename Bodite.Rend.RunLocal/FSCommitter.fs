@@ -20,10 +20,11 @@ type FSCommitter (baseDirPath : string) =
 
         if not <| Directory.Exists(dirPath) then
             Directory.CreateDirectory(dirPath) |> ignore 
-
-        use sFile = File.Create(path)
-            
-        vf.Data
+                            
+        use sData = new MemoryStream(vf.Data)
+        use sFile = File.Create(path)        
+               
+        sData
         |> blitter sFile
 
 

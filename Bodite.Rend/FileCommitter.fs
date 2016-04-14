@@ -5,17 +5,18 @@ open System.IO
 
 
 
-type VirtFile (path, data: Stream) =
-    new (path, data: string) =
-        let str = new MemoryStream(Text.ASCIIEncoding.UTF8.GetBytes(data))
-        new VirtFile(path, str)
+type VirtFile (path, data: byte[]) =
+    new (p, s : string) =
+        let d = Text.ASCIIEncoding.UTF8.GetBytes(s)
+        new VirtFile(p, d)
 
     member val Path: string = path
-    member val Data: Stream = data
+    member val Data: byte[] = data
 
     interface IDisposable with
         member x.Dispose () =
-            x.Data.Dispose()
+//            x.Data.Dispose()
+            ()
 
 
 

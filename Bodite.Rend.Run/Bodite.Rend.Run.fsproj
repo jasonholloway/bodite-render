@@ -56,10 +56,10 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
     <None Include="App.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="FSLoader.fs" />
     <Compile Include="S3Committer.fs" />
     <Compile Include="Program.fs" />

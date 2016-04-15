@@ -1,6 +1,7 @@
-﻿open BoditeRender
+﻿module Program
 
-open System.IO;
+open BoditeRender
+open System.IO
 open System.Security.AccessControl
 open Amazon.S3
 
@@ -23,8 +24,9 @@ let main argv =
 
 
 
-    let templateLoader = new FSLoader(templatePath)
-    let fileCommitter = new S3Committer(s3Client, "bodite")
+    use templateLoader = new FSLoader(templatePath)
+    use committer = new S3Committer(s3Client, "bodite")
+    use debouncer = new Debouncer(committer) //Debouncer goes stale quickly: should operate in batches...
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
@@ -40,7 +42,7 @@ let main argv =
                                                      )            
             pages
             |> Renderer(templateLoader, ctx).renderPages
-            |> Seq.iter fileCommitter.Commit
+            |> Seq.iter debouncer.Commit
             ) 
         
     printfn "Rendered to S3"

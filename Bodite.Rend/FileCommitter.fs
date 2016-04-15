@@ -22,7 +22,8 @@ type VirtFile (path, data: byte[]) =
 
     
     member x.GetDataHash () =
-        r.Next() //obvs needs filling out...
+        x.Data
+        |> DataHasher.MD5Hash
 
         
     interface IDisposable with

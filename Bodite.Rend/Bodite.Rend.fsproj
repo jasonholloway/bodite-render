@@ -52,6 +52,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="DataHasher.fs" />
     <Compile Include="Blitter.fs" />
     <Compile Include="Locale.fs" />
     <Compile Include="LocaleString.fs" />

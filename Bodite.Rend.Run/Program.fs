@@ -5,6 +5,14 @@ open System.IO
 open System.Security.AccessControl
 open Amazon.S3
 
+
+
+type EmptyCommitMap () =
+    inherit CommitMap ()
+    override x.GetHashFor key = ""
+
+
+
 [<EntryPoint>]
 let main argv =     
     let templatePath = argv.[0]
@@ -29,9 +37,7 @@ let main argv =
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
-    |> (fun m ->            
-            use debouncer = new Debouncer(committer) //Debouncer goes stale quickly, therefore use afresh per batch
-                                                     //if doing watching etc will need to debounce the debouncer transactions etc etc
+    |> (fun m ->                        
             let pages = m |> Pages.buildPages
 
             let pageReg = pages |> Pages.buildPageRegistry
@@ -41,9 +47,15 @@ let main argv =
                                                      |> Set.ofSeq
                                                      |> pageReg.TryFind)
                                                      )            
-            pages
-            |> Renderer(templateLoader, ctx).renderPages
-            |> Seq.iter debouncer.Commit
+                                                     
+            let transaction =
+                pages
+                |> Renderer(templateLoader, ctx).renderPages
+                |> Seq.fold 
+                    (fun (t : CommitTransaction<EmptyCommitMap>) vf -> t.Add vf) 
+                    (CommitTransaction(committer, fun () -> EmptyCommitMap()))
+            
+            transaction.Complete()
             ) 
         
     printfn "Rendered to S3"

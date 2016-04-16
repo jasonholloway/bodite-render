@@ -50,7 +50,7 @@ type CommitMap () =
 
 
      
-type CommitTransaction (committer : FileCommitter, commitMapProvider: unit -> CommitMap, files : VirtFile list) =    
+type CommitTransaction<'M when 'M :> CommitMap> (committer : FileCommitter, commitMapProvider: unit -> 'M, files : VirtFile list) =    
     new (committer, mapProv) =
         CommitTransaction (committer, mapProv, [])
 

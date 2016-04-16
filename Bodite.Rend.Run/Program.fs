@@ -26,11 +26,12 @@ let main argv =
 
     use templateLoader = new FSLoader(templatePath)
     use committer = new S3Committer(s3Client, "bodite")
-    use debouncer = new Debouncer(committer) //Debouncer goes stale quickly: should operate in batches...
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
-    |> (fun m ->
+    |> (fun m ->            
+            use debouncer = new Debouncer(committer) //Debouncer goes stale quickly, therefore use afresh per batch
+                                                     //if doing watching etc will need to debounce the debouncer transactions etc etc
             let pages = m |> Pages.buildPages
 
             let pageReg = pages |> Pages.buildPageRegistry

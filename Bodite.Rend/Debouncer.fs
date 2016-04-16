@@ -9,6 +9,10 @@ type Debouncer (committer : FileCommitter) =
     //NOTE PLEASE! DEBOUNCINGCOMMITTER GOES STALE QUICKLY
     //Recreate on every transactional batch of commits
 
+
+
+
+
     
     //before every commit, check against table   
 

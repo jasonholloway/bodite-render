@@ -43,4 +43,26 @@ type FileCommitter () as o =
         member x.Dispose() = o.Dispose()
 
 
+[<AbstractClass>]
+type CommitMap () =
+    abstract member GetHashFor : string -> string
+        
+
+
      
+type CommitTransaction (committer : FileCommitter, commitMapProvider: unit -> CommitMap, files : VirtFile list) =    
+    new (committer, mapProv) =
+        CommitTransaction (committer, mapProv, [])
+
+    member x.Add vf =
+        CommitTransaction(committer, commitMapProvider, vf :: files)
+
+    member x.Complete () =
+        let commitMap = commitMapProvider()
+        
+        files
+        |> Seq.filter (fun vf -> not ( (commitMap.GetHashFor(vf.Path)).Equals(vf.GetDataHash()) ))
+        |> Seq.iter (fun vf -> vf |> committer.Commit)
+
+
+

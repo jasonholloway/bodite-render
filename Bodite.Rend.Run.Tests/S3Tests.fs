@@ -113,7 +113,7 @@ type S3Tests() =
 
         ensureBucketExists client Settings.BucketName
 
-        use committer = new S3Committer(client, Settings.BucketName)
+        use repo = new S3Repo(client, Settings.BucketName)
         
         let files =
             [
@@ -125,7 +125,7 @@ type S3Tests() =
             
         files
         |> Seq.map (fun (path, data) -> new VirtFile(path, data))
-        |> Seq.iter committer.Commit
+        |> Seq.iter repo.Write
             
         files
         |> Seq.map (fun (path, contents) ->

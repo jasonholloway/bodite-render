@@ -7,8 +7,8 @@ open Amazon.S3.Model
 
 
 
-type S3Committer (client : Amazon.S3.AmazonS3Client, bucketName : string) =
-    inherit FileCommitter ()
+type S3Repo (client : Amazon.S3.AmazonS3Client, bucketName : string) =
+    inherit FileRepo ()
     
 
     //-----------------------------------------------------------------------
@@ -25,8 +25,11 @@ type S3Committer (client : Amazon.S3.AmazonS3Client, bucketName : string) =
     //-----------------------------------------------------------------------
 
 
+    override x.Read (path : string) =
+        new VirtFile("", "")
 
-    override x.Commit (vf : VirtFile) =
+
+    override x.Write (vf : VirtFile) =
 
         let req = new PutObjectRequest()
         

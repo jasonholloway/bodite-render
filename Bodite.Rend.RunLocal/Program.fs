@@ -9,7 +9,7 @@ let main argv =
     let outputPath = argv.[1]
 
     let loader = new FSLoader(templatePath)
-    let committer = new FSCommitter(outputPath)
+    let repo = new FSRepo(outputPath)
                     
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
@@ -25,7 +25,7 @@ let main argv =
                                                      )            
             pages
             |> Renderer(loader, ctx).renderPages
-            |> Seq.iter committer.Commit
+            |> Seq.iter repo.Write
             ) 
         
     printfn "Rendered to %s" outputPath

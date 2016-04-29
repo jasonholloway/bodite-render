@@ -3,16 +3,18 @@
 open System.IO
 
 
-type FSCommitter (baseDirPath : string) =
-    inherit FileCommitter ()
+type FSRepo (baseDirPath : string) =
+    inherit FileRepo ()
     
     member x.ConcretizePath virtPath =
         match Path.HasExtension(virtPath) with
         | true  -> virtPath
         | false -> (Path.Combine(virtPath, "index.html")).Replace('\\', '/')
                
+    override x.Read path =
+        new VirtFile("", "")
 
-    override x.Commit (vf: VirtFile) =    
+    override x.Write (vf: VirtFile) =    
         let blitter = Blitter.create (Array.zeroCreate<byte>(4096))
         
         let path = Path.Combine (baseDirPath, (vf.Path |> x.ConcretizePath))

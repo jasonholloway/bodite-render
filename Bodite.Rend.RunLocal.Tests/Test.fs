@@ -25,17 +25,17 @@ module RunLocal =
 
 
     [<TestFixture>]
-    type ``getFSCommitter`` () =
+    type ``getFSRepo`` () =
 
         [<Test>]
         member x.``commits to immediate directory`` () =
             use folder = new Helpers.TempFolder()
 
-            let committer = new FSCommitter(folder.Path)
+            let repo = new FSRepo(folder.Path)
                     
             use vf = new VirtFile("file.html", "blarg")
                        
-            vf |> committer.Commit
+            vf |> repo.Write
 
             File.ReadAllText(Path.Combine(folder.Path, vf.Path))
             |> should equal "blarg"
@@ -44,10 +44,10 @@ module RunLocal =
         [<Test>]
         member x.``creates intermediate folders if not existent, then commits`` () =
             use folder = new Helpers.TempFolder()
-            use committer = new FSCommitter(folder.Path)                    
+            use repo = new FSRepo(folder.Path)                    
             use vf = new VirtFile("blarg/oof/file.html", "blarg")
                        
-            vf |> committer.Commit
+            vf |> repo.Write
             
             Directory.Exists(Path.Combine(folder.Path, "blarg"))
             |> should equal true
@@ -62,14 +62,14 @@ module RunLocal =
         [<Test>]
         member x.``commits into intermediate folders if existent`` () =
             use folder = new Helpers.TempFolder()
-            use committer = new FSCommitter(folder.Path)
+            use repo = new FSRepo(folder.Path)
             
             Directory.CreateDirectory(Path.Combine(folder.Path, "krunk"))
             |> ignore
             
             use vf = new VirtFile("krunk/file.html", "blarg")
                        
-            vf |> committer.Commit
+            vf |> repo.Write
             
             Directory.Exists(Path.Combine(folder.Path, "krunk"))
             |> should equal true
@@ -80,25 +80,25 @@ module RunLocal =
 
         [<Test>]
         member x.``concretizes hanging path to index doc in new named folder`` () =
-            use committer = new FSCommitter("")
+            use repo = new FSRepo("")
             
             "pomeranians/teddy-pom-pom"
-            |> committer.ConcretizePath
+            |> repo.ConcretizePath
             |> should equal "pomeranians/teddy-pom-pom/index.html"
 
         
         [<Test>]
         member x.``leaves fully specced paths alone`` () =
-            use committer = new FSCommitter("")
+            use repo = new FSRepo("")
             
             "pomeranians/teddy-pom-pom.html"
-            |> committer.ConcretizePath
+            |> repo.ConcretizePath
             |> should equal "pomeranians/teddy-pom-pom.html"
 
         [<Test>]
         member x.``concretizes empty path`` () =
-            use committer = new FSCommitter("")
+            use repo = new FSRepo("")
 
             ""
-            |> committer.ConcretizePath
+            |> repo.ConcretizePath
             |> should equal "index.html"

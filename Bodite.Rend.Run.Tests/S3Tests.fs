@@ -43,9 +43,14 @@ type S3TestSetup() =
 
     [<TearDown>]
     member x.TearDown () =
-        p.CloseMainWindow() |> ignore
-        p.Kill()
-        p.Dispose()
+        try
+            p.CloseMainWindow() |> ignore
+            p.Kill()
+            p.Dispose()
+        with
+            | x -> ()
+        
+        
         //remove root folder here!
         //...
       

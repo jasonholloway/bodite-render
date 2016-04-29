@@ -52,8 +52,6 @@ let main argv =
     use templateLoader = new FSLoader(templatePath)
     use repo = new S3Repo(s3Client, "bodite")
 
-//    use committer = new S3Committer(s3Client, "bodite")
-                    
     CouchDbLoader.loadDbModel "http://localhost:5984/bb"
     |> Hydrate.hydrateModel
     |> (fun m ->                        

@@ -6,32 +6,6 @@ open System.Security.AccessControl
 open Amazon.S3
 
 
-//
-//type EmptyCommitMap () =
-//    inherit CommitMap ()
-//    override x.GetHashFor key = ""
-
-
-type CommitTransaction (repo : FileRepo) =
-
-    member this.Yield x : list<VirtFile> = []
-
-//    member this.Bind(m, f) =
-//                List.collect f m
-//
-//    member this.Zero m = 
-//                //commit all here
-//                m
-                    
-    member __.Quote() = ()
-    member __.Run(q) = q
-
-    [<CustomOperation("commit")>]
-    member this.Commit (files, vf) = List.Cons(vf, files)
-
-
-
-
 [<EntryPoint>]
 let main argv =     
     let templatePath = argv.[0]
@@ -63,50 +37,10 @@ let main argv =
                                                      |> Seq.map (fun o -> PageKey(o))
                                                      |> Set.ofSeq
                                                      |> pageReg.TryFind)
-                                                     )   
-            CommitTransaction(repo) {                                               
-                        printfn "213"
-
-                        commit (new VirtFile("", ""))
-                
-                        commit (new VirtFile("", ""))
-                
-                        commit (new VirtFile("", ""))
-                
-                        commit (new VirtFile("", ""))                
-                }
-                |> (fun q -> ())
-                
-
-    //                do pages
-    //                    |> Renderer(templateLoader, ctx).renderPages     
-    //                    |> iter (fun p -> ())
-                
-                
-
-
-//            let commit = CommitTransaction(null)
-//
-//            commit {
-//                let! x = [13]
-//                
-//            }
-                         
-
-            //committer should check commitMap
-            //encapsulation away from here - keeps this clear
-
-
-
-//                                          
-//            let transaction =
-//                pages
-//                |> Renderer(templateLoader, ctx).renderPages
-//                |> Seq.fold 
-//                    (fun (t : CommitTransaction<EmptyCommitMap>) vf -> t.Add vf) 
-//                    (CommitTransaction(committer, fun () -> EmptyCommitMap()))
-//            
-//            transaction.Complete()
+                                                     )               
+            pages 
+            |> Renderer(templateLoader, ctx).renderPages
+            |> Seq.iter repo.Write
             ) 
         
     printfn "Rendered to S3"

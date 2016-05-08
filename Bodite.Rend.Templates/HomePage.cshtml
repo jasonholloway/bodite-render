@@ -19,14 +19,12 @@
 
     @*<a href="@rootCatPage.Path">HERE!</a>*@
 
-    @*@foreach(var c in rootCat.Children) {
-
-        //need to get page from page registry...
-
-        var page = Context.GetPage.Invoke(new object[] { Model.Locale, c }).Value;
+    @foreach(var cat in Context.Model.Categories.Select(kv => kv.Value)) {
         
-        <a href="@page.Path">@c.Name.get(Model.Locale)</a>
-    }*@
+        var page = Context.GetPage(new object[] { Model.Locale, cat }).Value;
+        
+        <a href="@page.Path">@cat.Name.get(Model.Locale)</a>
+    }
 
 
 </div>

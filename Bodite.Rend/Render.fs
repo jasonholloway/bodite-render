@@ -28,7 +28,7 @@ type LazyStream (fac : unit -> Stream) =
         
 type RenderContext<'M when 'M :> Model> (model: 'M, getPage: obj seq -> Page option) = 
     member x.Model = model
-    member x.GetPage = getPage
+    member x.GetPage(s) = getPage s
 
    
 
@@ -49,31 +49,36 @@ type BoditeTemplate<'M,'P when 'M :> Model and 'P :> Page> () as x =
 
 
 
+type Activator<'M when 'M :> Model> (renderContext) =
+    interface IActivator with
+        member x.CreateInstance (c) =                                      
+            match c.Loader.CreateInstance c.TemplateType with
+            | :? IBoditeTemplate<'M> as t -> 
+                    t.Context <- renderContext
+                    t :?> ITemplate
+            | t -> 
+                    t
+        
+        
 
-type Renderer<'M when 'M :> Model> (loader: TemplateLoader, ctx: RenderContext<'M>) =
+type Renderer<'M when 'M :> Model> (loader: TemplateLoader, renderContext) =
 
-    let templateMgr = DelegateTemplateManager(System.Func<_,_>(loader.Load)) :> ITemplateManager
+//    let templateMgr = DelegateTemplateManager(System.Func<_,_>(loader.Load)) :> ITemplateManager
     
+    let renderService =
+        let c = TemplateServiceConfiguration()
+        c.TemplateManager <- DelegateTemplateManager(System.Func<_,_>(loader.Load))
+        c.Activator <- Activator<'M>(renderContext)
+        c.Language <- RazorEngine.Language.CSharp
+        c.Debug <- true
 
-    let renderService = 
-                FluentTemplateServiceConfiguration(fun x -> 
-                                                        x.ManageUsing(templateMgr)
-                                                         .ActivateUsing(fun c -> 
-                                                                            match c.Loader.CreateInstance c.TemplateType with
-                                                                            | :? IBoditeTemplate<'M> as t -> 
-                                                                                    t.Context <- ctx
-                                                                                    t :?> ITemplate
-                                                                            | t -> 
-                                                                                    t
-                                                                            )                                                      
-                                                        |> ignore)
-                |> RazorEngineService.Create
-            
+        c |> RazorEngineService.Create
+                    
                 
     member x.renderPage (p: Page) =    
         use str = new MemoryStream()
         use writer = new StreamWriter(str)
-
+        
         renderService.RunCompile(
                         p.GetType().Name + ".cshtml",
                         writer,

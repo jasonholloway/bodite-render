@@ -1,6 +1,7 @@
 *.swp
 .aws
 .fakes3-root
+.s3rver
 
 obj/
 packages/

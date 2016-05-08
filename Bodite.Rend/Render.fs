@@ -45,6 +45,23 @@ type BoditeTemplate<'M,'P when 'M :> Model and 'P :> Page> () as x =
     member x.Page = x.Model
     member x.Site = x.Context.Model
     member x.FindPage([<ParamArray>]keys: obj[]) = x.Context.GetPage(keys).Value
+    member x.FindLocalizedPage([<ParamArray>]keys: obj[]) = x.FindPage(seq { yield x.Page.Locale :> obj; yield! keys } |> Seq.toArray)
+
+    member x.T(ls : LocaleString) = 
+        match ls.Map.TryFind(x.Page.Locale) with
+        | Some v -> v
+        | None ->
+            match ls.Map.TryFind(Locales.Default) with
+            | Some v -> v
+            | None -> ""
+
+    member x.T([<ParamArray>]rs : string[]) =
+        Locales.All
+        |> Seq.zip rs
+        |> Seq.find (fun (_, l) -> l = x.Page.Locale)
+        |> (fun (s, _) -> s)
+
+
 
     interface IBoditeTemplate<'M> with
         member x.Context with get() = context.Value

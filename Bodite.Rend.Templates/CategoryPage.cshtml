@@ -1,7 +1,6 @@
-﻿@using RazorEngine.Templating
-@using BoditeRender
-@inherits HtmlTemplateBase<CategoryPage>
+﻿@using BoditeRender
+@inherits BoditeTemplate<BoditeModel, CategoryPage>
 
-<h2>Category: @Model.Title</h2>
+<h2>Category: @T(Page.Category.Name)</h2>
 
 <div>{{12345}}</div>

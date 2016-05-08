@@ -1,7 +1,6 @@
-﻿@using RazorEngine.Templating
-@using BoditeRender
-@inherits HtmlTemplateBase<ProductPage>
+﻿@using BoditeRender
+@inherits BoditeTemplate<BoditeModel, ProductPage>
 
-<h2>Product: @Model.Title</h2>
+<h2>Product: @T(Page.Product.Name)</h2>
 
 <div>{{12345}}</div>

@@ -22,15 +22,17 @@ type WrappedKey (v: obj) =
             
 
 [<AbstractClass>]
-type Page (keys: obj seq) =
+type Page (locale: Locale, keys: obj seq) =
 
     member val Keys = 
-                keys 
+                [[locale :> obj] |> Seq.ofList; keys] 
+                |> Seq.concat
                 |> Seq.map (fun k -> WrappedKey(k)) 
                 |> Set.ofSeq
 
     abstract member Path : string
-    abstract member Title : string
+    
+    member x.Locale = locale
 
 
 

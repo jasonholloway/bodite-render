@@ -35,10 +35,9 @@ let createCatAndProd () =
 
 
 type TestPage () =
-    inherit Page(["Test"])
+    inherit Page(Locales.Default, ["Test"])
 
     override Page.Path = ""
-    override Page.Title = "Hello"
 
 
 type DummyLoader (s : string) =

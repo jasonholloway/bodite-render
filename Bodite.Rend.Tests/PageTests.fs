@@ -97,10 +97,9 @@ type ``buildPages`` () =
         
 
 type TestPage (keys: obj seq) =
-    inherit Page(keys)
+    inherit Page(Locales.Default, keys)
 
     override Page.Path = ""
-    override Page.Title = "Hello"
 
 
 

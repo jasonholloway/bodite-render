@@ -2,11 +2,9 @@
 
                                                 
 type HomePage (locale: Locale) =
-    inherit Page(["Index"; locale])
+    inherit Page(locale, ["Index"])
 
     override Page.Path = ""
-    override Page.Title = "Brigitas Bodite"
     
-    member val Locale = locale
     member val FeaturedProducts : List<Product> = List.empty
     

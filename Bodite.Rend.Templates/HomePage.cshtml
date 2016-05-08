@@ -3,7 +3,7 @@
 @{    
     //var rootCatPage = Context.GetPage.Invoke(new object[] { Model.Locale, rootCat }).Value;
 }
-<h2>@Page.Title</h2>
+<h2>@T("Brigitas Bodite", "Brigitaski Boditeski")</h2>
 
 
 <div>
@@ -11,13 +11,35 @@
 
     @foreach(var cat in Site.Categories) {
 
-        var catPage = FindPage(Page.Locale, cat);
+        var catPage = FindLocalizedPage(cat);
 
-        <a href="@catPage.Path">@cat.Name.get(Page.Locale)</a>
+        <a href="@catPage.Path">@T(cat.Name)</a>
     }
 
 
 </div>
 
 
+@*
+    What I really want is a lovely, part-resolved graph of PageSpecs    
+    Each spec would link to each related spec, and each would have its path fully resolved
+    
+    It wouldn't make much sense, for instance, for pages of different locales to link to
+    each other accept via the solitary 'change language' link
+        
+    Such links should all be determined at a prior stage
+
+    Alternatively, we could respect the freedom of the template writer to decide exactly
+    this structure of the site. But the extent of the freedom seems excessive - it's surely
+    only like this normally because of the low expectations of back-end devs.
+
+    Pages should be fathomed in the abstract first: then this structure draped by templates.
+
+    Then the question is, how to build a page graph nicely?
+    
+    We will receive a lot of model objects - these are then to be projected with interconnections...
+    
+    There has to be indirection at the point of wiring together disparate parts of the graph.        
+
+*@
 

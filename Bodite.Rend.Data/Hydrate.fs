@@ -29,9 +29,11 @@ module Hydrate =
 
                               
                                   
-    let hydrateCategories (prodMap: Map<string, Product>) (dbCats: DbCategory list) =
+    let hydrateCategories (prods: Set<Product>) (dbCats: DbCategory list) =
     
         let dbCatMap = dbCats |> Seq.map (fun c -> (c.Key, c)) |> Map.ofSeq
+
+        let prodMap = prods |> Set.toSeq |> Seq.map (fun p -> (p.Key, p)) |> Map.ofSeq
 
         let prodsByCatMap = prodMap
                                 |> Map.toSeq                                
@@ -78,9 +80,10 @@ module Hydrate =
 
 
 
-    type HydratedModel (prods : Map<string, Product>, cats : Map<string, Category>) =
+    type HydratedModel (locales: Set<Locale>, prods: Set<Product>, cats: Set<Category>) =
         inherit BoditeModel ()
 
+        override x.Locales = locales
         override x.Products = prods
         override x.Categories = cats
 
@@ -88,16 +91,17 @@ module Hydrate =
 
 
     let hydrateModel (dbModel: DbModel) =
+        let locales = Locales.All
+                        |> Set.ofSeq
+
         let prods = dbModel.Products
                     |> hydrateProducts 
-                    |> Seq.map (fun p -> (p.Key, p))
-                    |> Map.ofSeq
+                    |> Set.ofSeq
                     
         let cats = dbModel.Categories
                    |> hydrateCategories prods 
-                   |> Seq.map (fun c -> (c.Key, c))
-                   |> Map.ofSeq
+                   |> Set.ofSeq
 
-        HydratedModel(prods, cats) :> BoditeModel
+        HydratedModel(locales, prods, cats) :> BoditeModel
 
 

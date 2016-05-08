@@ -35,7 +35,7 @@ let createCatAndProd () =
 
 
 type TestPage () =
-    inherit Page("Test")
+    inherit Page(["Test"])
 
     override Page.Path = ""
     override Page.Title = "Hello"

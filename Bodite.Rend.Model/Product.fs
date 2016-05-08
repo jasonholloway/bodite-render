@@ -1,6 +1,5 @@
 ﻿namespace BoditeRender
 
-
 type Product = {
     Key: string
     Name: LocaleString

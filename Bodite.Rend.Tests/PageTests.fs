@@ -33,23 +33,21 @@ let ofType<'T> subject =
 
 let catKeys = [1..5] |> List.map (fun _ -> Guid.NewGuid().ToString())
 
+let locales = Locales.All |> Set.ofSeq
+
 let prods = [1..30] 
             |> Seq.map (fun _ -> createProduct (catKeys |> Helpers.getRandomSelection 2)) 
-            |> Seq.map (fun p -> (p.Key, p))
-            |> Map.ofSeq 
+            |> Set.ofSeq 
 
 let cats =  catKeys 
             |> Seq.map 
                 (fun key -> createCatOfProds key (prods 
-                                                    |> Map.toSeq
-                                                    |> Seq.filter (fun (k, p) -> p.CategoryKeys |> Seq.exists (fun ck -> ck.Equals(key)))
-                                                    |> Seq.map (fun (k, p) -> p)
+                                                    |> Seq.filter (fun p -> p.CategoryKeys |> Seq.exists (fun ck -> ck.Equals(key)))
                                                     |> Seq.toList
                                                     ))
-            |> Seq.map (fun c -> (c.Key, c))
-            |> Map.ofSeq
+            |> Set.ofSeq
 
-let model = new TestModel(products=prods, categories=cats);
+let model = new TestModel(locales, prods, cats)
 
 
 
@@ -58,10 +56,13 @@ let model = new TestModel(products=prods, categories=cats);
 type ``buildPages`` () =    
 
     [<Test>]
-    member x.``returns list of pages`` () =
+    member x.``returns seq of pages`` () =
         let res = Pages.buildPages model
-        res.GetType() |> should equal (List.empty<Page>.GetType())
-    
+
+        Assert.That(
+                res,
+                Is.InstanceOf<seq<Page>>())
+
 
     [<Test>]
     member x.``builds one ProductPage per Product * Category * Locale`` () =    
@@ -69,8 +70,7 @@ type ``buildPages`` () =
         |> Pages.buildPages
         |> Seq.filter ofType<ProductPage>
         |> Seq.length |> should equal ((model.Products 
-                                            |> Map.toSeq 
-                                            |> Seq.collect (fun (_, p) -> p.CategoryKeys) 
+                                            |> Seq.collect (fun p -> p.CategoryKeys) 
                                             |> Seq.length) 
                                         * Locales.All.Length)
 
@@ -86,7 +86,7 @@ type ``buildPages`` () =
 
     [<Test>]
     member x.``builds one HomePage per Locale`` () =
-        new EmptyTestModel()
+        TestModel(Locales.All |> Set.ofSeq, Set.empty, Set.empty)
         |> Pages.buildPages
         |> Seq.filter ofType<HomePage>
         |> Seq.length |> should equal Locales.All.Length
@@ -105,30 +105,32 @@ type TestPage (keys: obj seq) =
 
 
 [<TestFixture>]
-type ``buildPageRegistry`` () =
+type ``PageRegistry`` () =
         
     [<Test>]
-    member x.``takes page list and returns map of sets * pages`` () =
+    member x.``builds from page list and returns map of keys * pages`` () =
         [ for i in [0..10] -> TestPage([i]) :> Page]
-        |> Pages.buildPageRegistry 
-        |> should be ofExactType<Map<Set<PageKey>, Page>>
+        |> PageReg.build
+        |> should be ofExactType<Map<Set<WrappedKey>, Page>>
 
 
     [<Test>]
-    member x.``returns correct page`` () =
+    member x.``finds page given correct key seq`` () =
         let createKeys () : obj list = 
             [
                 Locale(Guid.NewGuid().ToString())
                 Guid.NewGuid().ToString()
+                obj()
             ]
 
         let pages = [| for i in [0..100] -> TestPage(createKeys()) :> Page |]
 
         let reg = pages
-                  |> Pages.buildPageRegistry
+                  |> PageReg.build
 
-        reg.TryFind(pages.[9].Keys).Value
-        |> should equal pages.[9]
-        
-        reg.TryFind(pages.[19].Keys).Value
-        |> should equal pages.[19]
+        pages
+        |> Seq.iter (fun page -> 
+                        page.Keys |> Set.toSeq |> Seq.map (fun k -> k.Value) |> Seq.rev
+                        |> PageReg.findPage reg                        
+                        |> should equal (Some page)
+                    )

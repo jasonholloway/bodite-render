@@ -42,13 +42,10 @@ let main argv =
     |> (fun m ->                        
             let pages = m |> Pages.buildPages
 
-            let pageReg = pages |> Pages.buildPageRegistry
+            let pageReg = pages |> PageReg.build
 
-            let ctx = RenderContext(m, (fun objs -> objs 
-                                                     |> Seq.map (fun o -> PageKey(o))
-                                                     |> Set.ofSeq
-                                                     |> pageReg.TryFind)
-                                                     )               
+            let ctx = RenderContext(m, pageReg |> PageReg.findPage)
+                     
             pages 
             |> Renderer(templateLoader, ctx).renderPages
             |> Seq.iter repo.Write

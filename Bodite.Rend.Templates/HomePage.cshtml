@@ -1,29 +1,19 @@
-﻿@using RazorEngine.Templating
-@using BoditeRender
-@using System.Linq
+﻿@using BoditeRender
 @inherits BoditeTemplate<BoditeModel, HomePage>
-@{
-    var rootCat = Context.Model.Categories.TryFind("root").Value;
-    
+@{    
     //var rootCatPage = Context.GetPage.Invoke(new object[] { Model.Locale, rootCat }).Value;
 }
-<h2>HomePage: @Model.Title</h2>
-
-
-
-<h4>@( ((IBoditeTemplate<BoditeModel>)this).Context.Model.Categories.Count )</h4>
+<h2>@Page.Title</h2>
 
 
 <div>
-    <h3>Root cat page</h3>
+    <h2>Home</h2>
 
-    @*<a href="@rootCatPage.Path">HERE!</a>*@
+    @foreach(var cat in Site.Categories) {
 
-    @foreach(var cat in Context.Model.Categories.Select(kv => kv.Value)) {
-        
-        var page = Context.GetPage(new object[] { Model.Locale, cat }).Value;
-        
-        <a href="@page.Path">@cat.Name.get(Model.Locale)</a>
+        var catPage = FindPage(Page.Locale, cat);
+
+        <a href="@catPage.Path">@cat.Name.get(Page.Locale)</a>
     }
 
 

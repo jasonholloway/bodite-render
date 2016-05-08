@@ -84,8 +84,7 @@ type ``hydrateModel`` () =
         let model = dbModel |> Hydrate.hydrateModel
 
         model.Categories
-        |> Map.toSeq
-        |> Seq.map (fun (_, c) -> c.Key)
+        |> Seq.map (fun c -> c.Key)
         |> Set.ofSeq
         |> should equal (dbModel.Categories
                          |> Seq.map (fun c -> c.Key)
@@ -101,8 +100,7 @@ type ``hydrateModel`` () =
         let model = dbModel |> Hydrate.hydrateModel
 
         model.Products
-        |> Map.toSeq
-        |> Seq.map (fun (_, p) -> p.Key)
+        |> Seq.map (fun p -> p.Key)
         |> Set.ofSeq
         |> should equal (dbModel.Products
                          |> Seq.map (fun p -> p.Key)
@@ -161,7 +159,7 @@ type ``hydrateCategories`` () =
                      |> Set.ofSeq
     
         let builtKeys = dbCats
-                        |> Hydrate.hydrateCategories Map.empty
+                        |> Hydrate.hydrateCategories Set.empty
                         |> Seq.map (fun c -> c.Key)
                         |> Set.ofSeq
 
@@ -175,13 +173,12 @@ type ``hydrateCategories`` () =
     member x.``groups products per cat`` () =
         let _, dbCats = createDbCats 3 4
             
-        let prodMap = dbCats 
+        let prods = dbCats 
                         |> Seq.collect (fun c -> [0..4] |> Seq.map (fun _ -> createProduct [c.Key])) 
-                        |> Seq.map (fun p -> (p.Key, p))
-                        |> Map.ofSeq
+                        |> Set.ofSeq
 
         dbCats
-        |> Hydrate.hydrateCategories prodMap
+        |> Hydrate.hydrateCategories prods
         |> List.iter (fun c -> c.Products.Length |> should equal 5)
 
 
@@ -193,7 +190,7 @@ type ``hydrateCategories`` () =
         let specs = (Helpers.flatten (fun n -> n.Children) rootSpec)
                         
         let cats = dbCats
-                   |> Hydrate.hydrateCategories Map.empty
+                   |> Hydrate.hydrateCategories Set.empty
                    |> Seq.find (fun c -> c.Key.Equals("root"))
                    |> Helpers.flatten (fun n -> n.Children)
 

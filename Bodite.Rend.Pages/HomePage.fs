@@ -2,7 +2,7 @@
 
                                                 
 type HomePage (locale: Locale) =
-    inherit Page(["Index", locale])
+    inherit Page(["Index"; locale])
 
     override Page.Path = ""
     override Page.Title = "Brigitas Bodite"

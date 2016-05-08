@@ -6,14 +6,14 @@ open System
 module Pages =
    
     let buildHomePage (m: BoditeModel) =        
-        [for l in Locales.All ->
-                    HomePage(l) :> Page]
+        m.Locales
+        |> Seq.map (fun l -> HomePage(l) :> Page)
 
 
     let buildCategoryPages (m: BoditeModel) =
-        Locales.All
-        |> List.collect (fun l ->  
-                            [for (_, c) in (Map.toSeq m.Categories) ->
+        m.Locales 
+        |> Seq.collect (fun l ->  
+                            [for c in m.Categories ->
                                 CategoryPage(l, c) :> Page
                                 ]
                             )
@@ -21,11 +21,10 @@ module Pages =
 
 
     let buildProductPages (m: BoditeModel) =
-        Locales.All
-        |> List.collect (fun l ->
+        m.Locales
+        |> Seq.collect (fun l ->
                             m.Categories
-                            |> Map.toSeq
-                            |> Seq.collect (fun (_, c) ->
+                            |> Seq.collect (fun c ->
                                                 c.Products
                                                 |> Seq.map (fun p -> ProductPage(l, p, c) :> Page) )
                             |> Seq.toList )
@@ -37,13 +36,5 @@ module Pages =
             buildCategoryPages m
             buildProductPages m
         ]
-        |> List.concat
+        |> Seq.concat
 
-
-    let buildPageRegistry (pages: Page seq) =
-        pages
-        |> Seq.map (fun p -> (p.Keys, p))
-        |> Map.ofSeq
-
-
-        

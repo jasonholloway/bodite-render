@@ -3,7 +3,7 @@
 open System
 
 
-type PageKey (v: obj) =
+type WrappedKey (v: obj) =
     member val Value = v
     member val Hash = v.GetHashCode()
 
@@ -15,24 +15,33 @@ type PageKey (v: obj) =
 
     interface IComparable with
         member x.CompareTo(o) =
-            let other = (o :?> PageKey)
+            let other = (o :?> WrappedKey)
             x.Hash - other.Hash
 
 
             
 
 [<AbstractClass>]
-type Page (keys: Set<PageKey>) =
+type Page (keys: obj seq) =
 
-    new(keys : obj seq) =
-        Page(keys 
-             |> Seq.map (fun k -> PageKey(k))
-             |> Set.ofSeq)
-
-    new(key : obj) =
-        Page([key])
-        
-    member val Keys = keys
+    member val Keys = 
+                keys 
+                |> Seq.map (fun k -> WrappedKey(k)) 
+                |> Set.ofSeq
 
     abstract member Path : string
     abstract member Title : string
+
+
+
+
+module PageReg =
+    let build (pages: seq<Page>) =
+        pages
+        |> Seq.map (fun p -> (p.Keys, p))
+        |> Map.ofSeq
+        
+    let findPage (registry : Map<Set<WrappedKey>,Page>) (keys : seq<obj>) =
+        let wrappedKeys = keys |> Seq.map( fun k -> WrappedKey(k)) |> Set.ofSeq
+        registry.TryFind wrappedKeys
+        

@@ -2,7 +2,7 @@
 
 
 type ProductPage (locale: Locale, prod: Product, cat: Category) = 
-    inherit Page([cat, prod, locale])
+    inherit Page([cat; prod; locale])
     
     override Page.Path = "product/" + prod.Key
     override Page.Title = defaultArg (prod.Name.get locale) ""

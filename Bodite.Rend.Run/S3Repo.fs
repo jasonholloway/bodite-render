@@ -26,7 +26,7 @@ type S3Repo (client : Amazon.S3.AmazonS3Client, bucketName : string) =
 
 
     override x.Read (path : string) =
-        new VirtFile("", "")
+        failwith "notimpl"
 
 
     override x.Write (vf : VirtFile) =
@@ -45,6 +45,9 @@ type S3Repo (client : Amazon.S3.AmazonS3Client, bucketName : string) =
 
         ()
 
+
+    override x.Remove (path : string) =
+        failwith "notimpl"
 
     override x.Dispose () =
         //client.Dispose()

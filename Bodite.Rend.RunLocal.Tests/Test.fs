@@ -33,7 +33,7 @@ module RunLocal =
 
             let repo = new FSRepo(folder.Path)
                     
-            use vf = new VirtFile("file.html", "blarg")
+            let vf = new VirtFile("file.html", "blarg")
                        
             vf |> repo.Write
 
@@ -45,7 +45,7 @@ module RunLocal =
         member x.``creates intermediate folders if not existent, then commits`` () =
             use folder = new Helpers.TempFolder()
             use repo = new FSRepo(folder.Path)                    
-            use vf = new VirtFile("blarg/oof/file.html", "blarg")
+            let vf = new VirtFile("blarg/oof/file.html", "blarg")
                        
             vf |> repo.Write
             
@@ -67,7 +67,7 @@ module RunLocal =
             Directory.CreateDirectory(Path.Combine(folder.Path, "krunk"))
             |> ignore
             
-            use vf = new VirtFile("krunk/file.html", "blarg")
+            let vf = new VirtFile("krunk/file.html", "blarg")
                        
             vf |> repo.Write
             

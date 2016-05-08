@@ -12,7 +12,10 @@ type FSRepo (baseDirPath : string) =
         | false -> (Path.Combine(virtPath, "index.html")).Replace('\\', '/')
                
     override x.Read path =
-        new VirtFile("", "")
+        failwith "notimpl"
+
+    override x.Remove path =
+        failwith "notimpl"
 
     override x.Write (vf: VirtFile) =    
         let blitter = Blitter.create (Array.zeroCreate<byte>(4096))

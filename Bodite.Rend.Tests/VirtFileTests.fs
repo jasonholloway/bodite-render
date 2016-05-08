@@ -13,7 +13,7 @@ type VirtFileTests () =
         let sameData = ASCIIEncoding.UTF8.GetBytes("hello Jason!")
 
         let calcHash i =
-            use vf = new VirtFile("a/path/" + i.ToString(), sameData)
+            let vf = new VirtFile("a/path/" + i.ToString(), sameData)
             vf.GetDataHash()
             
         [0..20]
@@ -24,9 +24,9 @@ type VirtFileTests () =
         
     [<Test>]
     member x.``GetDataHash() returns mostly unique number`` () =
-        use vf1 = new VirtFile("lkjlj", "fipipokklkle")
-        use vf2 = new VirtFile("afafjpojp", "ljpjpjpojdvds")
-        use vf3 = new VirtFile("ads;lk;k;k;", "vsvsosoos")
+        let vf1 = new VirtFile("lkjlj", "fipipokklkle")
+        let vf2 = new VirtFile("afafjpojp", "ljpjpjpojdvds")
+        let vf3 = new VirtFile("ads;lk;k;k;", "vsvsosoos")
 
         Assert.That(vf1.GetDataHash(), Is.Not.EqualTo(vf2.GetDataHash()))
         Assert.That(vf1.GetDataHash(), Is.Not.EqualTo(vf3.GetDataHash()))

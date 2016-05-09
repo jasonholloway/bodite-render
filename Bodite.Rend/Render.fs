@@ -4,25 +4,7 @@ open System
 open System.IO
 open RazorEngine.Configuration
 open RazorEngine.Templating
-
-//
-//
-//type LazyStream (fac : unit -> Stream) =
-//    inherit Stream()
-//    
-//    let lzStr = Lazy.Create fac
-//                                
-//    override x.get_CanRead () = true
-//    override x.get_CanSeek () = true
-//    override x.get_CanWrite () = false
-//    override x.get_Length () = lzStr.Value.Length
-//    override x.get_Position () = lzStr.Value.Position
-//    override x.set_Position (v) = lzStr.Value.Position <- v
-//    override x.Flush () = lzStr.Value.Flush()
-//    override x.Seek (offset, origin) = lzStr.Value.Seek(offset, origin)
-//    override x.SetLength (l) = raise (System.NotSupportedException())
-//    override x.Read (buffer, offset, count) = lzStr.Value.Read(buffer, offset, count)
-//    override x.Write (buffer, offset, count) = raise (System.NotSupportedException())
+open System.Runtime.Remoting.Messaging
 
    
         
@@ -44,24 +26,23 @@ type BoditeTemplate<'M,'P when 'M :> Model and 'P :> Page> () as x =
     member x.Context with get() = context.Value
     member x.Page = x.Model
     member x.Site = x.Context.Model
-    member x.FindPage([<ParamArray>]keys: obj[]) = x.Context.GetPage(keys).Value
-    member x.FindLocalizedPage([<ParamArray>]keys: obj[]) = x.FindPage(seq { yield x.Page.Locale :> obj; yield! keys } |> Seq.toArray)
+    
+    member x.FindPage([<ParamArray>]keys: obj[]) = 
+        let keys = seq { yield x.Page.Locale :> obj; yield! keys }
+        x.Context.GetPage(keys).Value
 
     member x.T(ls : LocaleString) = 
-        match ls.Map.TryFind(x.Page.Locale) with
-        | Some v -> v
-        | None ->
-            match ls.Map.TryFind(Locales.Default) with
-            | Some v -> v
-            | None -> ""
+        ls.getString x.Page.Locale 
 
     member x.T([<ParamArray>]rs : string[]) =
         Locales.All
         |> Seq.zip rs
         |> Seq.find (fun (_, l) -> l = x.Page.Locale)
         |> (fun (s, _) -> s)
-
-
+        
+    override x.Execute() = 
+        CallContext.LogicalSetData("bodite-locale", x.Page.Locale)
+        base.Execute()
 
     interface IBoditeTemplate<'M> with
         member x.Context with get() = context.Value

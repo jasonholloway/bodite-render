@@ -60,10 +60,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="ProgramS3.fs" />
     <Compile Include="FSLoader.fs" />
     <Compile Include="S3Repo.fs" />
-    <Compile Include="Program.fs" />
     <Content Include="packages.config" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bodite.Rend.Pages\Bodite.Rend.Pages.fsproj">
@@ -81,6 +82,10 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

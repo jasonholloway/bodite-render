@@ -1,5 +1,6 @@
 ﻿namespace BoditeRender
 
+open System.Runtime.Remoting.Messaging
 
 type LocaleString (m: Map<Locale, string>) =
 
@@ -8,11 +9,19 @@ type LocaleString (m: Map<Locale, string>) =
 
     member val Map = m
 
-    member x.get locale =
-        match m.TryFind(locale) with
-        | Some s -> Some s
-        | None -> if locale.Equals(Locales.Default) then None else x.get(Locales.Default)  //should try to get default first...
-        
+    member x.getString locale =
+        match x.Map.TryFind(locale) with
+        | Some v -> v
+        | None ->
+            match x.Map.TryFind(Locales.Default) with
+            | Some v -> v
+            | None -> ""
+           
+    override x.ToString() =
+        match CallContext.LogicalGetData("bodite-locale") with
+        | :? Locale as l -> x.getString(l)
+        | _ -> x.getString(Locales.Default)
+
     override x.Equals other =
         match other with
         | :? LocaleString as o -> x.Map = o.Map 

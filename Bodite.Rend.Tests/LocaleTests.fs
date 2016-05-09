@@ -34,8 +34,8 @@ type ``LocaleString`` () =
                                             (Locales.RU, "Hello")
                                          ]
     
-        s.get Locales.RU
-        |> should equal (Some "Hello")
+        s.getString Locales.RU
+        |> should equal "Hello"
 
 
 
@@ -45,17 +45,17 @@ type ``LocaleString`` () =
                                             (Locales.LV, "Hello")
                                          ]
     
-        s.get Locales.RU
-        |> should equal (Some "Hello")
+        s.getString Locales.RU
+        |> should equal "Hello"
 
         
         
     [<Test>]
-    member x.``returns None if nothing provided`` () =    
+    member x.``returns empty string if nothing provided`` () =    
         let s = BoditeRender.LocaleString []
 
-        s.get Locales.LV 
-        |> should equal None
+        s.getString Locales.LV 
+        |> should equal ""
 
 
 

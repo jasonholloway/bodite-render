@@ -5,11 +5,26 @@ open System
 open System.IO
 open System.Security.AccessControl
 open Amazon.S3
+open Newtonsoft.Json
+open Newtonsoft.Json.Linq
 
 
 let Port = 9988
 let BucketName = "bodite"//Guid.NewGuid().ToString()
 let BaseUri = UriBuilder("http", "localhost", Port).Uri 
+
+
+
+
+let commitAll (files : VirtFile seq) =    
+    let jFiles = JArray()
+      
+    files
+    |> Seq.iter (fun vf -> jFiles.Add(JObject()))
+    
+    use writer = new JsonTextWriter(Console.Out) :> JsonWriter
+    jFiles.WriteTo(writer)
+
 
 
 
@@ -48,9 +63,9 @@ let main argv =
                      
             pages 
             |> Renderer(templateLoader, ctx).renderPages
-            |> Seq.iter repo.Write
+            |> commitAll
             ) 
         
-    printfn "Rendered to S3"
+    printfn "Rendered to STDOUT"
 
     0

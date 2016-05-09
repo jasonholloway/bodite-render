@@ -115,7 +115,7 @@ type ``hydrateLocaleString`` () =
     
     [<Test>]
     member x.``suppresses unrecognised locale codes, while exposing proper ones`` () =
-        let l = Locales.All.Head
+        let l = Locales.Default
 
         let m = Map<string, string>([
                                         (l.Code, "Blah")
@@ -124,7 +124,7 @@ type ``hydrateLocaleString`` () =
 
         let s = Hydrate.hydrateLocaleString m
 
-        s.get(l).IsSome |> should equal true
+        s.getString(l) |> should equal "Blah"
 
 
 
